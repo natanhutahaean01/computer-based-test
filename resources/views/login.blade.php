@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,56 +8,50 @@
     <title>Sign In</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Import font Poppins from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
+   body {
             font-family: 'Poppins', sans-serif;
-            font-size: 14px;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, black, #00bfae, black, #00796b, black);
         }
 
-        .container {
-            width: 400px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .background-gradient {
+            background: linear-gradient(135deg,black, #00bfae,black, #00796b,black);
         }
 
-        .container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .form-group .error-message {
-            color: red;
-            font-size: 12px;
-        }
-
-        .btn {
+        .form-container {
             width: 100%;
-            padding: 10px;
-            background: #007bff;
-            color: #fff;
-            border: none;
+            max-width: 400px;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-button {
+            background-color: #1d4ed8;
+            color: white;
+            padding: 0.75rem 1.5rem;
             border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
+            width: 100%;
+            font-weight: 600;
         }
 
-        .btn:hover {
-            background: #0056b3;
+        .form-button:hover {
+            background-color: #2563eb;
         }
 
+        .terms-text {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .terms-text a {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
         .popup {
             display: none;
             padding: 20px;
@@ -85,9 +80,16 @@
     </style>
 </head>
 
-<body>
-    <div class="container">
-        <form id="loginForm" action="{{ route('login') }}" method="POST">
+<body class="background-gradient min-h-screen flex justify-center items-center">
+    
+    <div class="form-container">
+        <div class="text-center mb-4">
+            <img src="{{ asset('images/logo.png') }}" alt="QuizHub Logo" class="w-32 mx-auto">
+        </div>
+        <p class="text-center text-sm text-gray-600 mb-6">Selamat Datang</p>
+        
+        <!-- Login Form -->
+        <form method="POST" action="{{ route('login') }}" id="login-form">
             @csrf
             <div class="form-group">
                 <label for="email">Email *</label>
@@ -107,14 +109,21 @@
                     </span>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-primary">Masuk</button>
+            <button type="submit" class="form-button">Masuk</button>
+            <p class="terms-text">
+                By signing in you are agreeing to our <a href="#" class="hover:underline">Terms</a> and <a href="#" class="hover:underline">privacy policy</a>
+            </p>
         </form>
     </div>
+
+    
 
     <!-- Popup for login success -->
     <div id="popup-success" class="popup">Login berhasil!</div>
 
     <script>
+        document.getElementById("login-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form from submitting immediately
         // Function to display popup after successful login
         function showPopup() {
             const popup = document.getElementById('popup-success');
