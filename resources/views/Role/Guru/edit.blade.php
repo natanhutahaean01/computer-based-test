@@ -25,9 +25,9 @@
                         {{ $user->name }}
                     </span>
                 </div>
-                <img alt="Profile picture of Natan Hutahean" class="rounded-full ml-4" height="40"
-                    src="https://storage.googleapis.com/a1aa/image/KO6yf8wvxyOnH9pvZuXN0ujQxQrH2zDDdLtZaIA-KQ8.jpg"
-                    width="40" />
+<div class="user-info">
+                    <img alt="Profile picture" class="rounded-full ml-4" height="50" src="{{ asset('images/user.png') }}" alt="Profil">
+                </div>
             </div>
             <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 hidden"
                 id="logoutDropdown">

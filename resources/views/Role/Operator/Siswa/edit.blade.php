@@ -283,9 +283,9 @@
                     <span class="text-white">Welcome, Operator</span>
                     <span class="text-white font-semibold">{{ $user->name }}</span>
                 </div>
-                <img alt="Profile picture" class="rounded-full ml-4" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
-                    width="50">
+<div class="user-info">
+                    <img alt="Profile picture" class="rounded-full ml-4" height="50" src="{{ asset('images/user.png') }}" alt="Profil">
+                </div>
             </div>
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">

@@ -25,8 +25,9 @@
                         Admin Name
                     </span>
                 </div>
-                <img alt="Profile picture of Admin" class="rounded-full ml-4" height="40"
-                    src="https://placehold.co/40x40" width="40" />
+<div class="user-info">
+                    <img alt="Profile picture" class="rounded-full ml-4" height="50" src="{{ asset('images/user.png') }}" alt="Profil">
+                </div>
             </div>
             <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 hidden"
                 id="logoutDropdown">

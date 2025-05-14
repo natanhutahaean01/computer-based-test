@@ -245,9 +245,8 @@
         </div>
         <div class="user-info">
             <span>Admin</span>
-            <img alt="Profile picture" class="rounded-full ml-4" height="50"
-                src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
-                width="50" onclick="toggleDropdown()">
+                       <img alt="Profile picture" class="rounded-full ml-4" height="50" src="{{ asset('images/user.png') }}" alt="Profil" onclick="toggleDropdown()">
+
             <!-- Dropdown Menu -->
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">
