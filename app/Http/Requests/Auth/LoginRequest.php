@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use App\Models\siswa;
-use App\Models\Guru;
+use App\Models\guru;
 use App\Models\Operator;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Auth\Events\Lockout;
@@ -98,7 +98,7 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        $guru = Guru::where('id_user', $user->id)->first();
+        $guru = guru::where('id_user', $user->id)->first();
         if ($guru && $guru->status === 'Tidak Aktif') {
             throw ValidationException::withMessages([
                 'identifier' => 'Akun guru Anda tidak aktif.',
