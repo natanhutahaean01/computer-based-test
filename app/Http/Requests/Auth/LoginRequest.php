@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
-use App\Models\Siswa;
+use App\Models\siswa;
 use App\Models\Guru;
 use App\Models\Operator;
 use Illuminate\Support\Facades\RateLimiter;
@@ -91,7 +91,7 @@ class LoginRequest extends FormRequest
         }
 
         // Cek status untuk siswa, guru, dan operator
-        $siswa = Siswa::where('id_user', $user->id)->first();
+        $siswa = siswa::where('id_user', $user->id)->first();
         if ($siswa && $siswa->status === 'Tidak Aktif') {
             throw ValidationException::withMessages([
                 'identifier' => 'Akun siswa Anda tidak aktif.',
