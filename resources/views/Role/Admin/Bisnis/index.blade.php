@@ -227,7 +227,7 @@
                         {{ $bisnis['nama_sekolah'] }}
                     </h2>
                     <p class="text-gray-700 text-base">
-                        Email:
+                        Jumlah Pendapatan:
                         <span class="font-semibold text-black">
                             {{ $bisnis->jumlah_pendapatan }}
                         </span>

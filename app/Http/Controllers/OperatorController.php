@@ -156,6 +156,12 @@ class OperatorController extends Controller
     public function destroy(string $id)
     {
         $operator = Operator::findOrFail($id);
+
+                // Cek apakah status siswa aktif
+        if ($operator->status === 'Aktif') {
+            return redirect()->route('Admin.Akun.index')->with('error', 'Operator dengan status "Aktif" tidak dapat dihapus.');
+        }
+
         $operator->delete(); 
         return redirect()->route('Admin.Akun.index')->with('success', 'Akun operator berhasil dihapus.');
     }

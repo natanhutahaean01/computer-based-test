@@ -11,8 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-    <style>
-        body {
+        <style>body {
             background-color: #f4f5f7;
             font-family: 'Arial', sans-serif;
             padding: 0;
@@ -265,9 +264,16 @@
                 </div>
             </section>
         @endforeach
+        <div class="div">
+            @if (session('error'))
+                <div class="text-red-500 mb-2">
+                    {{ session('error') }}
+                </div>
+            @endif
+        </div>
         </main>
     </div>
-      <!-- Modal -->
+    <!-- Modal -->
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -300,7 +306,7 @@
                 myModal.hide();
             }, 3000); // 3000ms = 3 detik
         @endif
-        
+
         // Dropdown toggle
         const userBtn = document.getElementById('userBtn');
         const dropdownMenu = document.getElementById('dropdown-menu');

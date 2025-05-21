@@ -69,7 +69,7 @@ class GuruController extends Controller
             // Custom validation messages
             $request->validate([
                 'name' => 'required|string|max:255',
-                'nip' => 'required|numeric|digits:18|min:18|unique:guru',
+                'nip' => 'required|numeric|digits:16|min:16|unique:guru',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|min:8',
                 'status' => 'in:Aktif,Tidak Aktif',
@@ -79,8 +79,8 @@ class GuruController extends Controller
                 'nip.required' => 'NIP harus diisi.',
                 'nip.unique' => 'NIP sudah terdaftar.',
                 'nip.numeric' => 'NIP harus berupa angka.',
-                'nip.digits' => 'NIP harus terdiri dari 18 digit.',
-                'nip.min' => 'NIP harus terdiri dari minimal 18 digit.',
+                'nip.digits' => 'NIP harus terdiri dari 16 digit.',
+                'nip.min' => 'NIP harus terdiri dari minimal 16 digit.',
                 'email.required' => 'Email harus diisi.',
                 'email.email' => 'Format email tidak valid.',
                 'email.unique' => 'Email sudah terdaftar.',
