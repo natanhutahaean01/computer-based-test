@@ -52,8 +52,7 @@ return [
     |
     */
 
-'url' => env('APP_URL', 'https://computer-based-test-production.up.railway.app/'),
-
+    'url' => env('APP_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------

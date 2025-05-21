@@ -112,7 +112,7 @@
             gap: 20px;
             transition: all 0.3s ease;
             z-index: 900;
-      
+
         }
 
         .sidebar a {
@@ -245,24 +245,21 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <h1 class="text-2xl font-bold text-white">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
-        </h1>
-        
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
+
         <div class="relative dropdown">
             <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
                 <div class="flex flex-col items-center">
                     <span class="text-white">Welcome, Operator</span>
                     <span class="text-white font-semibold">{{ $user->name }}</span>
                 </div>
-                <img alt="Profile picture" class="rounded-full ml-4" height="50" src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg" width="50">
+                <i
+                    class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="logout-btn">
-                        <span>Logout</span>
-                    </button>
+                    <button type="submit" class="btn btn-danger w-100">Logout</button>
                 </form>
             </div>
         </div>
@@ -273,27 +270,32 @@
         <div class="sidebar">
             <ul>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Kurikulum.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.Kurikulum.index') }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-calendar-alt text-white mr-2"></i> Kurikulum
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.MataPelajaran.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.MataPelajaran.index') }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-book text-white mr-2"></i> Mata Pelajaran
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Kelas.index') }}" class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
+                    <a href="{{ route('Operator.Kelas.index') }}"
+                        class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
                         <i class="fas fa-home text-black mr-2"></i> Kelas
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Guru.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.Guru.index') }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-chalkboard-teacher text-white mr-2"></i> Daftar Guru
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Siswa.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.Siswa.index') }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-user-graduate text-white mr-2"></i> Daftar Siswa
                     </a>
                 </li>
@@ -305,64 +307,68 @@
             <div class="flex justify-end mb-4">
                 <a href="{{ route('Operator.Kelas.create') }}"
                     class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
-                    <i class="fas fa-plus mr-2"></i> Tambahkan Kelas
+                    <i class="fas fa-plus mr-2"></i> Tambahkan
                 </a>
             </div>
-            <h1 class="text-lg font-bold mb-4 text-blue-600">Informasi Kelas</h1>
-            <div class="space-y-4">
-                @foreach ($kelas as $kelases)
-                    <div class="bg-white p-6 rounded-lg flex justify-between items-center shadow-lg hover:shadow-xl transition duration-300">
-                        <h4 class="text-lg text-blue-600">{{ $kelases->nama_kelas }}</h4>
-                        <a href="{{ route('Operator.Kelas.edit', $kelases->id_kelas) }}"
-                            class="text-gray-500 flex items-center hover:text-gray-700">
-                            <i class="fas fa-pen mr-1"></i> Edit
-                        </a>
+            <div class="bg-white p-4 md:p-6 rounded-lg shadow-md">
+                <h1 class="text-lg font-bold mb-4 text-blue-600">Informasi Kelas</h1>
+                <div class="space-y-4">
+                    @foreach ($kelas as $kelases)
+                        <div
+                            class="bg-gray-100 p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <h2 class="text-2xl font-bold text-teal-700">
+                                {{ $kelases->nama_kelas }}
+                            </h2>
+                            <a href="{{ route('Operator.Kelas.edit', $kelases->id_kelas) }}"
+                                class="text-blue-500 flex items-center hover:text-blue-400 hover:shadow-lg hover:scale-105 transition-all duration-300">
+                                <i class="fas fa-pen mr-1"></i> Edit
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="successModalLabel">Berhasil Menambahkan Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Berhasil Menambahkan Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    @if(session('success'))
-                        {{ session('success') }}
-                    @endif
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <div class="modal-body">
+                        @if (session('success'))
+                            {{ session('success') }}
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-       <!-- JavaScript to show modal if success message exists and auto-close after 3 seconds -->
-       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-       <script>
-           // Menampilkan modal otomatis jika session success ada
-           @if(session('success'))
-               var myModal = new bootstrap.Modal(document.getElementById('successModal'));
-               myModal.show();
-   
-               // Menutup modal setelah 3 detik
-               setTimeout(function() {
-                   myModal.hide();
-               }, 3000); // 3000ms = 3 detik
-           @endif
+        <!-- JavaScript to show modal if success message exists and auto-close after 3 seconds -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Menampilkan modal otomatis jika session success ada
+            @if (session('success'))
+                var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+                myModal.show();
+
+                // Menutup modal setelah 3 detik
+                setTimeout(function() {
+                    myModal.hide();
+                }, 3000); // 3000ms = 3 detik
+            @endif
 
 
-        // Function to toggle dropdown visibility
-        function toggleDropdown() {
-           const dropdown = document.getElementById("dropdown-menu");
-           dropdown.classList.toggle("show");
-       }
-       </script>
+            // Function to toggle dropdown visibility
+            function toggleDropdown() {
+                const dropdown = document.getElementById("dropdown-menu");
+                dropdown.classList.toggle("show");
+            }
+        </script>
 </body>
 
 </html>

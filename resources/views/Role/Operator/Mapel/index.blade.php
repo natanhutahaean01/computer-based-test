@@ -243,24 +243,21 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <h1 class="text-2xl font-bold text-white">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
-        </h1>
-        
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
+
         <div class="relative dropdown">
             <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
                 <div class="flex flex-col items-center">
                     <span class="text-white">Welcome, Operator</span>
                     <span class="text-white font-semibold">{{ $user->name }}</span>
                 </div>
-                <img alt="Profile picture" class="rounded-full ml-4" height="50" src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg" width="50">
+                <i
+                    class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="logout-btn">
-                        <span>Logout</span>
-                    </button>
+                    <button type="submit" class="btn btn-danger w-100">Logout</button>
                 </form>
             </div>
         </div>
@@ -271,27 +268,32 @@
         <div class="sidebar">
             <ul>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Kurikulum.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.Kurikulum.index') }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-calendar-alt text-white mr-2"></i> Kurikulum
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.MataPelajaran.index') }}" class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
+                    <a href="{{ route('Operator.MataPelajaran.index') }}"
+                        class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
                         <i class="fas fa-book text-black mr-2"></i> Mata Pelajaran
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Kelas.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.Kelas.index') }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-home text-white mr-2"></i> Kelas
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Guru.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.Guru.index') }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-chalkboard-teacher text-white mr-2"></i> Daftar Guru
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Siswa.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.Siswa.index') }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-user-graduate text-white mr-2"></i> Daftar Siswa
                     </a>
                 </li>
@@ -303,7 +305,7 @@
             <div class="flex justify-end mb-4">
                 <a href="{{ route('Operator.MataPelajaran.create') }} "
                     class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
-                    <i class="fas fa-plus mr-2"></i> Tambahkan Mata Pelajaran
+                    <i class="fas fa-plus mr-2"></i> Tambahkan
                 </a>
             </div>
             <div class="bg-white p-4 md:p-6 rounded-lg shadow-md">
@@ -315,17 +317,20 @@
                             class="mt-1 block w-full border border-gray-300 rounded-md p-2">
                             <option value="">Semua Kurikulum</option>
                             @foreach ($kurikulums as $kurikulum)
-                                <option value="{{ $kurikulum->id_kurikulum }}">{{ $kurikulum->nama_kurikulum }}</option>
+                                <option value="{{ $kurikulum->id_kurikulum }}">{{ $kurikulum->nama_kurikulum }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
                     <div id="mapel-list">
                         @foreach ($mataPelajarans as $mapel)
-                            <div class="bg-gray-300 p-4 rounded flex justify-between items-center mb-4 mapel-item"
+                            <div class="bg-gray-100 p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center mapel-item"
                                 data-kurikulum="{{ $mapel->id_kurikulum }}">
-                                <span class="text-lg text-blue-600">{{ $mapel->nama_mata_pelajaran }}</span>
+                                <h2 class="text-2xl font-bold text-teal-700">
+                                    {{ $mapel->nama_mata_pelajaran }}
+                                </h2>
                                 <a href="{{ route('Operator.MataPelajaran.edit', $mapel->id_mata_pelajaran) }}"
-                                    class="text-gray-500 flex items-center hover:text-gray-700">
+                                    class="text-blue-500 flex items-center hover:text-blue-400 hover:shadow-lg hover:scale-105 transition-all duration-300">
                                     <i class="fas fa-pen mr-1"></i> Edit
                                 </a>
                             </div>
@@ -345,7 +350,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    @if(session('success'))
+                    @if (session('success'))
                         {{ session('success') }}
                     @endif
                 </div>
@@ -360,7 +365,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Show modal automatically if session success exists
-        @if(session('success'))
+        @if (session('success'))
             var myModal = new bootstrap.Modal(document.getElementById('successModal'));
             myModal.show();
 

@@ -4,8 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operator | Siswa</title>
-
+    <title>Guru | Nilai | Edit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
@@ -270,9 +273,7 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <h1 class="text-2xl font-bold text-white">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
-        </h1>
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
 
         <div class="relative dropdown">
             <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
@@ -280,15 +281,13 @@
                     <span class="text-white">Welcome, Guru</span>
                     <span class="text-white font-semibold">{{ $user->name }}</span>
                 </div>
-                <img alt="Profile picture" class="rounded-full ml-4" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
-                    width="50">
+                <i
+                    class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit"
-                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">Logout</button>
+                    <button type="submit" class="btn btn-danger w-100">Logout</button>
                 </form>
             </div>
         </div>
@@ -300,7 +299,7 @@
             <a
                 href="{{ route('Guru.Course.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
                 <i class="fas fa-book-open text-sm"></i>
-                <span>Course</span>
+                <span>Kursus</span>
             </a>
             <a
                 href="{{ route('Guru.Latihan.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
@@ -309,14 +308,16 @@
             </a>
 
             <a
-                href="{{ route('Guru.Nilai.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
+                href="{{ route('Guru.Nilai.index') }}"class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
                 <i class="fas fa-chart-line text-sm"></i>
                 <span>Nilai</span>
             </a>
         </div>
-        <div id="app"
-            class="flex-1 bg-white p-6 rounded-lg shadow-md overflow-auto max-w-4xl mx-auto my-6 w-full">
-            <form action="{{ route('Guru.Persentase.update', $id_kursus) }}" method="POST" class="space-y-6 w-full">
+        <!-- Main Content -->
+        <div class="main-content">
+            <div id="app"
+                class="flex-1 bg-white p-6 rounded-lg shadow-md overflow-auto max-w-4xl mx-auto my-6 w-full">
+<form action="{{ route('Guru.Persentase.update', $id_kursus) }}" method="POST" class="space-y-6 w-full">
                 @csrf
                 @method('PUT')
 
@@ -363,29 +364,73 @@
                     Jumlah persentase tidak boleh lebih dari 100%.
                 </div>
 
-                <button type="submit"
-                    class="mt-6 w-full px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition flex justify-center items-center font-semibold text-lg">
-                    <i class="fa fa-save mr-2"></i> Simpan
-                </button>
+                <div class="flex justify-end">
+                    <button type="submit"
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
+                        <span>Simpan</span>
+                        <i class="fas fa-check ml-2"></i>
+                    </button>
+                </div>
             </form>
+            </div>
 
-        </div>
-        <script>
-            document.querySelector('form').addEventListener('input', function() {
-                let kuis = parseFloat(document.getElementById('persentase_kuis').value) || 0;
-                let uts = parseFloat(document.getElementById('persentase_UTS').value) || 0;
-                let uas = parseFloat(document.getElementById('persentase_UAS').value) || 0;
+            <script>
+                document.querySelector('form').addEventListener('input', function() {
+                    let kuis = parseFloat(document.getElementById('persentase_kuis').value) || 0;
+                    let uts = parseFloat(document.getElementById('persentase_UTS').value) || 0;
+                    let uas = parseFloat(document.getElementById('persentase_UAS').value) || 0;
 
-                let total = kuis + uts + uas;
+                    let total = kuis + uts + uas;
 
-                if (total > 100) {
-                    document.getElementById('warning-message').style.display = 'block';
-                } else {
-                    document.getElementById('warning-message').style.display = 'none';
+                    if (total > 100) {
+                        document.getElementById('warning-message').style.display = 'block';
+                    } else {
+                        document.getElementById('warning-message').style.display = 'none';
+                    }
+                });
+                // Dropdown toggle script
+                const dropdownButton = document.getElementById('dropdownButton');
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                const dropdownIcon = document.getElementById('dropdownIcon');
+
+                dropdownButton.addEventListener('click', () => {
+                    const isExpanded = dropdownButton.getAttribute('aria-expanded') === 'true';
+                    dropdownButton.setAttribute('aria-expanded', !isExpanded);
+
+                    if (dropdownMenu.style.maxHeight && dropdownMenu.style.maxHeight !== '0px') {
+                        dropdownMenu.style.maxHeight = '0px';
+                        dropdownMenu.style.paddingTop = '0';
+                        dropdownMenu.style.paddingBottom = '0';
+                        dropdownIcon.style.transform = 'rotate(0deg)';
+                    } else {
+                        dropdownMenu.style.maxHeight = dropdownMenu.scrollHeight + 'px';
+                        dropdownMenu.style.paddingTop = '0.5rem';
+                        dropdownMenu.style.paddingBottom = '0.5rem';
+                        dropdownIcon.style.transform = 'rotate(180deg)';
+                    }
+                });
+
+                // Close dropdown if clicked outside
+                window.addEventListener('click', (e) => {
+                    if (!dropdownButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.style.maxHeight = '0px';
+                        dropdownMenu.style.paddingTop = '0';
+                        dropdownMenu.style.paddingBottom = '0';
+                        dropdownButton.setAttribute('aria-expanded', 'false');
+                        dropdownIcon.style.transform = 'rotate(0deg)';
+                    }
+                });
+
+                // Initialize dropdown closed
+                dropdownMenu.style.maxHeight = '0px';
+                dropdownMenu.style.overflow = 'hidden';
+                dropdownMenu.style.transition = 'max-height 0.3s ease, padding 0.3s ease';
+
+                function toggleDropdown() {
+                    const dropdown = document.getElementById("dropdown-menu");
+                    dropdown.classList.toggle("show");
                 }
-            });
-        </script>
-
+            </script>
 </body>
 
 </html>

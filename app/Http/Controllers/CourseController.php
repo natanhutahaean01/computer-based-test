@@ -33,6 +33,11 @@ class CourseController extends Controller
                 "nama_kursus" => 'required|string|max:20|unique:kursus',
                 "password" => 'required|string|min:8|confirmed',
                 "image" => 'required|image|mimes:jpeg,png,jpg,gif|max:40960',
+            ],[
+                'name.required' => 'Kursus harus diisi.',
+                'password.required' => 'Password harus diisi.',
+                'password.min' => 'Password minimal terdiri dari 8 karakter.',
+
             ]);
 
             $idUser = auth()->user()->id;

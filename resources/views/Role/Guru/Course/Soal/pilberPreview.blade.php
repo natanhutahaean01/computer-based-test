@@ -31,14 +31,26 @@
         >
           Preview Soal Pilihan Ganda
         </h2>
-        <button
+        {{-- <button
           type="button"
           aria-label="Close modal"
           id="closeModalBtn"
           class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
         >
           <i class="fas fa-times fa-lg"></i>
-        </button>
+        </button> --}}
+<button
+    type="button"
+    aria-label="Close modal"
+    id="closeModalBtn"
+    class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+    onclick="window.location.href='{{route('Guru.Soal.index', ['id_ujian' => $soal->id_ujian ?? null, 'id_latihan' => $soal->id_latihan ?? null] ) }}'"
+>
+    <i class="fas fa-times fa-lg"></i>
+</button>
+
+
+
       </div>
       <div id="previewContent" class="p-6">
         <div class="bg-gray-50 rounded-md shadow-inner p-6 space-y-6">

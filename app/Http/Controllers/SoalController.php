@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Soal;
 use App\Models\User;
+use App\Models\Kursus;
 use App\Models\Ujian;
 use App\Models\Guru;
 use App\Models\latihan;
@@ -38,6 +39,11 @@ class SoalController extends Controller
         // Ambil data user yang sedang login
         $user = auth()->user();
 
+        $guru = Guru::where('id_user', $user->id)->first();
+
+        if (!$guru) {
+            return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
+        }
         // Kembalikan ke view dengan data soal yang sudah difilter
         return view('Role.Guru.Course.Soal.index', compact('soals', 'user', 'idUjian', 'idLatihan'));
     }
@@ -48,13 +54,19 @@ class SoalController extends Controller
         $users = auth()->user();
         $latihan = latihan::all();
 
+        $id_kursus = $request->query('id_kursus');
+
+        $courses = kursus::with('guru')->get(); // Ambil semua kursus
+
+        $course = $courses->where('id_kursus', $id_kursus)->first();
+
         switch ($type) {
             case 'pilgan':
-                return view('Role.Guru.Course.Soal.pilber', compact('users', 'latihan'));
+                return view('Role.Guru.Course.Soal.pilber', compact('users', 'latihan', 'id_kursus', 'courses', 'course'));
             case 'truefalse':
-                return view('Role.Guru.Course.Soal.truefalse', compact('users', 'latihan'));
+                return view('Role.Guru.Course.Soal.truefalse', compact('users', 'latihan', 'id_kursus', 'courses', 'course'));
             case 'essay':
-                return view('Role.Guru.Course.Soal.essai', compact('users', 'latihan'));
+                return view('Role.Guru.Course.Soal.essai', compact('users', 'latihan', 'id_kursus', 'courses', 'course'));
             default:
                 return redirect()->route('Guru.Soal.index')->with('error', 'Tipe soal tidak valid.');
         }
@@ -68,7 +80,7 @@ class SoalController extends Controller
             'soal' => 'required|string|max:40',
             'id_tipe_soal' => 'required|exists:tipe_soal,id_tipe_soal',
             'id_latihan' => 'nullable|exists:latihan,id_latihan', // Untuk latihan
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'jawaban_1' => 'nullable|string|max:30',
             'jawaban_2' => 'nullable|string|max:30',
             'jawaban_3' => 'nullable|string|max:30',
@@ -187,26 +199,26 @@ class SoalController extends Controller
     public function edit(Request $request, $id_soal)
     {
 
-        // Ambil soal berdasarkan ID
         $soal = Soal::findOrFail($id_soal);
 
         $user = auth()->user();
 
         $latihan = latihan::all();
 
-        // Cek tipe soal dan arahkan ke view yang sesuai
+        $id_kursus = $request->query('id_kursus');
+
+        $courses = kursus::with('guru')->get(); // Ambil semua kursus
+
+        $course = $courses->where('id_kursus', $id_kursus)->first();
+
         switch ($soal->id_tipe_soal) {
             case 1:
-                // Tipe soal 1, arahkan ke view untuk tipe soal 1
-                return view('Role.Guru.Course.Soal.pilberEdit', compact('soal', 'user', 'latihan'));
+                return view('Role.Guru.Course.Soal.pilberEdit', compact('soal', 'user', 'latihan', 'id_kursus', 'courses', 'course'));
             case 2:
-                // Tipe soal 2, arahkan ke view untuk tipe soal 2
-                return view('Role.Guru.Course.Soal.truefalseEdit', compact('soal', 'user', 'latihan'));
+                return view('Role.Guru.Course.Soal.truefalseEdit', compact('soal', 'user', 'latihan', 'id_kursus', 'courses', 'course'));
             case 3:
-                // Tipe soal 3, arahkan ke view untuk tipe soal 3
-                return view('Role.Guru.Course.Soal.essaiEdit', compact('soal', 'user', 'latihan'));
+                return view('Role.Guru.Course.Soal.essaiEdit', compact('soal', 'user', 'latihan', 'id_kursus', 'courses', 'course'));
             default:
-                // Jika tipe soal tidak dikenali, arahkan ke view default atau error
                 return redirect()->route('Guru.Soal.index')->with('error', 'Tipe soal tidak dikenal');
         }
     }
@@ -264,10 +276,10 @@ class SoalController extends Controller
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move($imagePath, $imageName);
 
-            $imageUrl = url('images/' . $imageName);  
+            $imageUrl = url('images/' . $imageName);
 
             $soal->image = $imageName;
-            $soal->image_url = $imageUrl;  
+            $soal->image_url = $imageUrl;
         }
 
         $soal->update([

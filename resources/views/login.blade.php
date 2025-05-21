@@ -70,7 +70,7 @@
                                 class="w-full border border-gray-300 rounded-lg py-3 px-4 pr-12 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
                                 id="email"
                                 name="identifier"
-                                placeholder="you@example.com"
+                                placeholder="Masukkan Email Anda"
                                 required=""
                                 type="email"
                             />
@@ -97,7 +97,7 @@
                                 class="w-full border border-gray-300 rounded-lg py-3 px-4 pr-12 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
                                 id="password"
                                 name="password"
-                                placeholder="Enter your password"
+                                placeholder="Masukkan Password Anda"
                                 required=""
                                 type="password"
                             />

@@ -2,10 +2,15 @@
 <html lang="en">
 
 <head>
-    <title>QuizHub</title>
+    <title>Guru | Ujian | Soal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         /* General Styles */
         body {
@@ -261,15 +266,47 @@
                 padding: 15px 0;
             }
         }
+
+        .breadcrumb {
+            padding: 0;
+            margin: 0;
+            display: flex;
+            /* Ensure the items are displayed in a row */
+        }
+
+        .breadcrumb-item {
+            display: inline-block;
+            /* Ensures the items are side by side */
+        }
+
+        .breadcrumb-item+.breadcrumb-item::before {
+            content: "/";
+            /* Use "/" as the separator */
+            padding: 0 8px;
+            color: #00796b;
+            /* Match the active color */
+        }
+
+        .breadcrumb-item a {
+            color: #00bfae;
+            text-decoration: none;
+        }
+
+        .breadcrumb-item a:hover {
+            color: #004d40;
+            text-decoration: underline;
+        }
+
+        .breadcrumb-item.active {
+            color: #00796b;
+        }
     </style>
 </head>
 
 <body>
     <!-- Header -->
     <div class="header">
-        <h1 class="text-2xl font-bold text-white">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
-        </h1>
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
 
         <div class="relative dropdown">
             <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
@@ -277,15 +314,13 @@
                     <span class="text-white">Welcome, Guru</span>
                     <span class="text-white font-semibold">{{ $user->name }}</span>
                 </div>
-                <img alt="Profile picture" class="rounded-full ml-4" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
-                    width="50">
+                <i
+                    class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit"
-                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">Logout</button>
+                    <button type="submit" class="btn btn-danger w-100">Logout</button>
                 </form>
             </div>
         </div>
@@ -295,9 +330,9 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <a
-                href="{{ route('Guru.Course.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
+                href="{{ route('Guru.Course.index') }}"class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
                 <i class="fas fa-book-open text-sm"></i>
-                <span>Course</span>
+                <span>Kursus</span>
             </a>
             <a
                 href="{{ route('Guru.Latihan.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
@@ -311,11 +346,9 @@
                 <span>Nilai</span>
             </a>
         </div>
-
         <div class="main-content">
-
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-2xl font-bold mb-4">Soal</h2>
+                <h2 class="text-2xl font-bold text-teal-700">Soal</h2>
                 <div class="flex justify-end mb-4">
                     <button onclick="showTipeSoalModal()"
                         class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center">
@@ -411,8 +444,8 @@
                                     </div>
 
                                     <div class="flex space-x-5 justify-end flex-wrap">
-                                        <form action="{{ route('Guru.Soal.preview', $soal->id_soal) }}" method="GET"
-                                            class="inline">
+                                        <form action="{{ route('Guru.Soal.preview', $soal->id_soal) }}"
+                                            method="GET" class="inline">
                                             <button type="submit"
                                                 class="text-yellow-500 flex items-center hover:text-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded">
                                                 <i class="fas fa-eye mr-1"></i> Preview
@@ -451,6 +484,48 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="successModalLabel">Berhasil Menambahkan Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if (session('success'))
+                            {{ session('success') }}
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript to show modal if success message exists and auto-close after 3 seconds -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Menampilkan modal otomatis jika session success ada
+            @if (session('success'))
+                var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+                myModal.show();
+
+                // Menutup modal setelah 3 detik
+                setTimeout(function() {
+                    myModal.hide();
+                }, 3000); // 3000ms = 3 detik
+            @endif
+
+
+            // Function to toggle dropdown visibility
+            function toggleDropdown() {
+                const dropdown = document.getElementById("dropdown-menu");
+                dropdown.classList.toggle("show");
+            }
+        </script>
         <script>
             // Dropdown toggle script
             const dropdownButton = document.getElementById('dropdownButton');

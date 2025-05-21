@@ -8,10 +8,10 @@
     </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-        <style>
-          body {
+    <style>
+        body {
             background-color: #f4f5f7;
             font-family: 'Arial', sans-serif;
             padding: 0;
@@ -99,7 +99,7 @@
 
         /* Sidebar Styles */
         .sidebar {
-            background: linear-gradient(to bottom,#00796b, #00bfae, #00796b);
+            background: linear-gradient(to bottom, #00796b, #00bfae, #00796b);
             width: 260px;
             padding: 25px 15px;
             position: fixed;
@@ -111,7 +111,7 @@
             gap: 20px;
             transition: all 0.3s ease;
             z-index: 900;
-       
+
         }
 
         .sidebar a {
@@ -204,19 +204,6 @@
             outline: none;
         }
 
-        /* Submit Button */
-        .form-container button[type="submit"] {
-            width: 100%;
-            padding: 15px;
-            background-color: #00bfae;
-            color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
         .form-container button[type="submit"]:hover {
             background-color: #00796b;
         }
@@ -255,110 +242,115 @@
 </head>
 
 
-   <!-- Header -->
-    <div class="header">
-        <h1 class="text-2xl font-bold text-white">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
-        </h1>
-        
-        <div class="relative dropdown">
-            <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
-                <div class="flex flex-col items-center">
-                    <span class="text-white">Admin</span>
-              
+<!-- Header -->
+<div class="header">
+    <h1 class="text-2xl font-bold text-white">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
+    </h1>
+
+    <div class="relative dropdown">
+        <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
+            <div class="flex flex-col items-center">
+                <span class="text-white">Admin</span>
+
+            </div>
+            <img alt="Profile picture" class="rounded-full ml-4" height="50"
+                src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
+                width="50">
+        </div>
+        <div id="dropdown-menu" class="dropdown-menu">
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">Logout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="flex flex-col md:flex-row">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul>
+            <li class="mb-4">
+                <a href="{{ route('Admin.Akun.index') }}"
+                    class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <i class="fas fa-calendar-alt text-white mr-2"></i> Operator
+                </a>
+            </li>
+            <li class="mb-4">
+                <a href="{{ route('Admin.Bisnis.index') }}"
+                    class="flex items-center text-black shadow p-2 rounded-lg hover:bg-blue-500">
+                    <i class="fas fa-book text-black mr-2"></i> Bisnis
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('Admin.Bisnis.index') }}">Akun</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Tambah Akun</li>
+            </ol>
+        </nav>
+        <div class="form-container">
+            <h2 class="text-xl font-bold mb-4 text-blue-600">Tambah Bisnis</h2>
+            <form action="{{ route('Admin.Bisnis.store') }}" method="POST" enctype="multipart/form-data"
+                class="space-y-6">
+                @csrf
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Nama Sekolah<span
+                            class="text-red-500">*</span></label>
+                    <input type="text" name="nama_sekolah" class="w-full border border-gray-400 p-2 rounded-lg">
+                    @error('nama_sekolah')
+                        <span class="alert-danger">{{ $message }}</span>
+                    @enderror
                 </div>
-                <img alt="Profile picture" class="rounded-full ml-4" height="50" src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg" width="50">
-            </div>
-            <div id="dropdown-menu" class="dropdown-menu">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">Logout</button>
-                </form>
-            </div>
+
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Jumlah Pendapatan<span
+                            class="text-red-500">*</span></label>
+                    <input type="text" name="jumlah_pendapatan" class="w-full border border-gray-400 p-2 rounded-lg">
+                    @error('jumlah_pendapatan')
+                        <span class="alert-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Perjanjian file upload -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Perjanjian (PDF/Word) <span
+                            class="text-red-500">*</span></label>
+                    <input type="file" name="perjanjian" class="w-full border border-gray-400 p-2 rounded-lg">
+                    @error('perjanjian')
+                        <span class="alert-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit"
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
+                        <span>Simpan</span>
+                        <i class="fas fa-check ml-2"></i>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
- 
-
-
-        <div class="flex flex-col md:flex-row">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <ul>
-                <li class="mb-4">
-                    <a href="{{ route('Admin.Akun.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
-                        <i class="fas fa-calendar-alt text-white mr-2"></i> Operator
-                    </a>
-                </li>
-                <li class="mb-4">
-                    <a href="{{ route('Admin.Bisnis.index') }}" class="flex items-center text-black shadow p-2 rounded-lg hover:bg-blue-500">
-                        <i class="fas fa-book text-black mr-2"></i> Bisnis
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('Admin.Bisnis.index') }}">Akun</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Tambah Akun</li>
-                </ol>
-            </nav>
-            <div class="form-container">
-                <h2 class="text-xl font-bold mb-4 text-blue-600">Tambah Bisnis</h2>
-                <form action="{{ route('Admin.Bisnis.store') }}" method="POST" enctype="multipart/form-data"
-                    class="space-y-6">
-                    @csrf
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Nama Sekolah<span
-                                class="text-red-500">*</span></label>
-                        <input type="text" name="nama_sekolah" class="w-full border border-gray-400 p-2 rounded-lg">
-                        @error('nama_sekolah')
-                            <span class="alert-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Jumlah Pendapatan<span
-                                class="text-red-500">*</span></label>
-                        <input type="text" name="jumlah_pendapatan"
-                            class="w-full border border-gray-400 p-2 rounded-lg">
-                        @error('jumlah_pendapatan')
-                            <span class="alert-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <!-- Perjanjian file upload -->
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Perjanjian (PDF/Word) <span
-                                class="text-red-500">*</span></label>
-                        <input type="file" name="perjanjian" class="w-full border border-gray-400 p-2 rounded-lg">
-                        @error('perjanjian')
-                            <span class="alert-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="flex justify-end">
-                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center">
-                            <span>Simpan</span>
-                            <i class="fas fa-check ml-2"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Function to toggle dropdown visibility
-        function toggleDropdown() {
-            const dropdown = document.getElementById("dropdown-menu");
-            dropdown.classList.toggle("show");
-        }
-    </script>
+<script>
+    // Function to toggle dropdown visibility
+    function toggleDropdown() {
+        const dropdown = document.getElementById("dropdown-menu");
+        dropdown.classList.toggle("show");
+    }
+</script>
 </body>
 
 </html>

@@ -65,20 +65,29 @@ class MateriController extends Controller
             return redirect()->back()->with('error', 'Kursus tidak ditemukan.');
         }
 
+        $courses = kursus::with('guru')->get();
+
+        $course = $courses->where('id_kursus', $id_kursus)->first();
+
         $user = auth()->user();
 
-        return view('Role.Guru.Course.Materi.create', compact('kursus', 'user', 'id_kursus'));
+        return view('Role.Guru.Course.Materi.create', compact('kursus','courses', 'course', 'user', 'id_kursus'));
     }
 
     public function store(Request $request)
     {
-        Log::info('Mulai validasi input.');
-        $request->validate([
-            'judul_materi' => 'required|string|max:30',
-            'deskripsi' => 'nullable|string',
-            'file' => 'required|mimes:pdf,docx,doc,ppt,pptx|max:10240', // Validasi file
-            'id_kursus' => 'required|exists:kursus,id_kursus', // Validasi kursus
-        ]);
+     Log::info('Mulai validasi input.');
+
+$request->validate([
+    'judul_materi' => 'required|string|max:30',
+    'deskripsi' => 'nullable|string',
+    'file' => 'required|mimes:pdf,docx,doc,ppt,pptx|max:10240', // Validasi file
+    'id_kursus' => 'required|exists:kursus,id_kursus', // Validasi kursus
+], [
+    'judul_materi.required' => 'Judul Materi Harus diisi',
+    'file.required' => 'File Wajib diunggah'
+]);
+
         Log::info('Validasi input berhasil.');
 
         Log::info('Mulai menyimpan file.');
@@ -144,11 +153,15 @@ class MateriController extends Controller
 
         $courses = Kursus::where('id_guru', $guru->id_guru)->get();
 
+        $courses = kursus::with('guru')->get();
+
+        $course = $courses->where('id_kursus', $id_kursus)->first();
+
         if ($courses->isEmpty()) {
             return redirect()->back()->with('error', 'Kursus tidak ditemukan.');
         }
 
-        return view('Role.Guru.Course.Materi.edit', compact('materi', 'guru', 'id_kursus', 'courses', 'user', 'id_materi'));
+        return view('Role.Guru.Course.Materi.edit', compact('materi','course', 'guru', 'id_kursus', 'courses', 'user', 'id_materi'));
     }
 
     public function update(Request $request, $id_materi)

@@ -25,18 +25,18 @@ class LatihanSoalController extends Controller
         $kelas = Kelas::all();
         $user = auth()->user();
 
-        return view('Role.Guru.Latihan.index', compact('latihan','mataPelajarans', 'user', 'kurikulums', 'mapel', 'kelas', 'id_latihan'));
+        return view('Role.Guru.Latihan.index', compact('latihan', 'mataPelajarans', 'user', 'kurikulums', 'mapel', 'kelas', 'id_latihan'));
     }
 
     public function create(Request $request)
     {
         $id_kurikulum = $request->input('id_kurikulum');
-    
+
         // Get all kurikulum and classes
         $kurikulums = Kurikulum::all();
         $kelas = Kelas::all();
         $user = auth()->user();
-    
+
         // If a kurikulum is selected, get the first mata pelajaran that matches
         if ($id_kurikulum) {
             $mapel = mata_pelajaran::where('id_kurikulum', $id_kurikulum)->first();
@@ -45,11 +45,11 @@ class LatihanSoalController extends Controller
         }
 
         $mataPelajarans = mata_pelajaran::with(['operator', 'kurikulum'])->get();
-    
+
         // Return the view with the selected mata pelajaran and other data
-        return view('Role.Guru.Latihan.create', compact('mataPelajarans','mapel', 'kurikulums', 'kelas', 'user'));
+        return view('Role.Guru.Latihan.create', compact('mataPelajarans', 'mapel', 'kurikulums', 'kelas', 'user'));
     }
-    
+
 
     public function store(Request $request)
     {
@@ -64,7 +64,16 @@ class LatihanSoalController extends Controller
             'id_kelas' => 'required|exists:kelas,id_kelas',
             'acak' => 'required|in:Aktif,Tidak Aktif',
             'status_jawaban' => 'required|in:Aktif,Tidak Aktif',
-            'grade' => 'required|integer',
+            'grade' => 'required|integer|min:100|max:100',
+        ],[
+            'Topik.required' => 'Topik harus diisi',
+            'id_kurikulum.required' => 'Kurikulum Harus dipilih',
+            'id_mata_pelajaran' => 'Mata Pelajaran Harus dipilih',
+            'id_kelas' => 'Kelas harus dipilih',
+            'acak' => 'Pilih acak soal',
+            'status_jawaban' => 'Pilih status jawaban',
+            'grade' => 'Grade min 100 max 100'
+
         ]);
 
         // Log the validated data
@@ -97,39 +106,49 @@ class LatihanSoalController extends Controller
 
     public function show(Latihan $latihanSoal)
     {
-        return view('Role.Guru.Latihan.index', compact('latihanSoal'));
+        return view('Role.Guru.Latihan.index', compact('mataPelajarans', 'mapel', 'kurikulums', 'kelas', 'user'));
     }
 
-    public function edit(Latihan $latihanSoal)
+    public function edit(Request $request, $id_latihan)
     {
-        return view('Role.Guru.Latihan.edit', compact('latihanSoal'));
-    }
+        $id_kurikulum = $request->input('id_kurikulum');
+        $kurikulums = Kurikulum::all();
+        $kelas = Kelas::all();
+        $user = auth()->user();
 
-    public function update(Request $request, LatihanSoal $latihanSoal)
-    {
-        $validated = $request->validate([
-            'Nilai' => 'required|integer',
-            'Image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'course_id' => 'required|exists:courses,id',
-            'kurikulum_id' => 'required|exists:kurikulums,id',
-            'kelas_id' => 'required|exists:kelas,id',
-            'mata_pelajaran_id' => 'required|exists:mata_pelajarans,id',
-            'user_id' => 'required|exists:users,id',
-        ]);
+        $latihan = Latihan::where('id_latihan', $id_latihan)->firstOrFail();
 
-        if ($request->hasFile('Image')) {
-            if ($latihanSoal->Image) {
-                Storage::disk('public')->delete($latihanSoal->Image);
-            }
-            $validated['Image'] = $request->file('Image')->store('images/latihan_soals', 'public');
+        if ($id_kurikulum) {
+            $mapel = mata_pelajaran::where('id_kurikulum', $id_kurikulum)->first();
+        } else {
+            $mapel = null;
         }
 
-        $latihanSoal->update($validated);
+        $mataPelajarans = mata_pelajaran::with(['operator', 'kurikulum'])->get();
 
-        return redirect()->route('Guru.LatihanSoal.index')->with('success', 'Latihan Soal updated successfully.');
+        return view('Role.Guru.Latihan.edit', compact('mataPelajarans', 'mapel', 'kurikulums', 'id_latihan', 'kelas', 'user', 'latihan'));
     }
 
-    public function destroy(LatihanSoal $latihanSoal)
+
+    public function update(Request $request, $id_latihan)
+    {
+        $validated = $request->validate([
+            'Topik' => 'required|string|max:255',
+            'id_kurikulum' => 'required|exists:kurikulum,id_kurikulum',
+            'id_mata_pelajaran' => 'required|exists:mata_pelajaran,id_mata_pelajaran',
+            'id_kelas' => 'required|exists:kelas,id_kelas',
+            'acak' => 'required|in:Aktif,Tidak Aktif',
+            'status_jawaban' => 'required|in:Aktif,Tidak Aktif',
+            'grade' => 'required|integer|min:100|max:100',
+        ]);
+
+        $latihan = Latihan::findOrFail($id_latihan);
+        $latihan->update($validated);
+
+        return redirect()->route('Guru.Latihan.index')->with('success', 'Latihan berhasil diperbarui.');
+    }
+
+    public function destroy(Latihan $latihanSoal)
     {
         if ($latihanSoal->Image) {
             Storage::disk('public')->delete($latihanSoal->Image);
@@ -137,6 +156,6 @@ class LatihanSoalController extends Controller
 
         $latihanSoal->delete();
 
-        return redirect()->route('Guru.LatihanSoal.index')->with('success', 'Latihan Soal deleted successfully.');
+        return redirect()->route('Guru.Latihan.index')->with('success', 'Latihan Soal deleted successfully.');
     }
 }

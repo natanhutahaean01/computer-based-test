@@ -4,8 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operator | Siswa</title>
-
+    <title>Guru | Kursus | Materi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
@@ -264,15 +267,20 @@
                 padding: 15px 0;
             }
         }
+
+        .alert-danger {
+            color: #e74c3c;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
     </style>
 </head>
 
 <body>
     <!-- Header -->
     <div class="header">
-        <h1 class="text-2xl font-bold text-white">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
-        </h1>
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
 
         <div class="relative dropdown">
             <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
@@ -280,15 +288,13 @@
                     <span class="text-white">Welcome, Guru</span>
                     <span class="text-white font-semibold">{{ $user->name }}</span>
                 </div>
-                <img alt="Profile picture" class="rounded-full ml-4" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
-                    width="50">
+                <i
+                    class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit"
-                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">Logout</button>
+                    <button type="submit" class="btn btn-danger w-100">Logout</button>
                 </form>
             </div>
         </div>
@@ -298,9 +304,9 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <a
-                href="{{ route('Guru.Course.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
+                href="{{ route('Guru.Course.index') }}"class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
                 <i class="fas fa-book-open text-sm"></i>
-                <span>Course</span>
+                <span>Kursus</span>
             </a>
             <a
                 href="{{ route('Guru.Latihan.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
@@ -317,20 +323,29 @@
         <!-- Main Content -->
         <div class="main-content">
             <div class="w-full bg-white p-6 shadow-md">
-                <h1 class="text-2xl font-semibold text-blue-600 mb-4">
-                    {{ $kursus->nama_kursus }}
-                </h1>
+                <nav class="text-gray-600 text-lg mb-4" aria-label="Breadcrumb">
+                    <ol class="list-reset flex">
+                        <li><a href="{{ route('Guru.Course.index') }}" class="text-blue-600 hover:underline">Course</a>
+                        </li>
+                        <li><span class="mx-2">/</span></li>
+                        <li><a href="{{ route('Guru.Materi.index', ['id_kursus' => $course->id_kursus]) }}"
+                                class="text-blue-600 hover:underline">Materi</a></li>
+                    </ol>
+                </nav>
                 <div class="flex justify-between mb-4">
-                    <h2 class="text-xl font-semibold mb-4">
-                        Course Content
-                    </h2>
-
-                    <a href="{{ route('Guru.ListSiswa', ['id_kursus' => $kursus->id_kursus]) }}" 
+                    <h1 class="text-2xl font-bold text-teal-700">
+                        {{ $kursus->nama_kursus }}
+                    </h1>
+                    <a href="{{ route('Guru.ListSiswa', ['id_kursus' => $kursus->id_kursus]) }}"
                         class="bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
-                        <i class="fas fa-download mr-2"></i> Informasi Siswa
-                     </a>
-                     
-                </div>  
+                        <i class="fas fa-user mr-2"></i> Informasi Siswa
+                    </a>
+                </div>
+                @if (session('error'))
+                    <div class="alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="border-b border-gray-300 mb-4">
                 </div>
                 <div class="flex mb-4">
@@ -346,47 +361,73 @@
                             <h3 class="text-lg font-semibold">
                                 Ujian
                             </h3>
-                        </a>                                                                    
-                    </div>
-                </div>                
-                <div class="flex justify-end mb-4">
-                    <a href="{{ route('Guru.Materi.create', ['id_kursus' => $id_kursus]) }}"
-                       class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center">
-                        <i class="fas fa-plus mr-2"></i> Tambahkan
-                    </a>
-                </div>                
-                @foreach ($materi->sortBy('tanggal_materi') as $exam)
-                <h4 class="text-lg font-semibold mb-2">
-                    {{ \Carbon\Carbon::parse($exam->tanggal_materi)->format('d M Y') }}
-                </h4>
-                <div class="flex justify-between items-center mb-4">
-                    <div class="flex-grow">
-                        <div class="exam-container">
-                            <strong>{{ $exam->judul_materi }} </strong>
-                            <p>{{ $exam->deskripsi }}</p>
-                        </div>
-                    </div>
-            
-                    <div class="flex space-x-5 justify-end">
-                        <form action="{{ route('Guru.Materi.destroy', $exam->id_materi) }}" method="POST"
-                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus soal ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-500 flex items-center hover:text-red-700">
-                                <i class="fas fa-trash-alt mr-1"></i> Delete
-                            </button>
-                        </form>
-
-                        <form action="{{ route('Guru.Materi.edit', $exam->id_materi) }}" method="GET">
-                            <input type="hidden" name="id_kursus" value="{{ $id_kursus }}">
-                            <button type="submit" class="text-blue-500 flex items-center hover:text-blue-700">
-                                <i class="fas fa-edit mr-1"></i> Edit
-                            </button>
-                        </form>                        
-                                                                                                                                                                                                                                                                      
+                        </a>
                     </div>
                 </div>
-            @endforeach            
+                <div class="flex justify-end mb-4">
+                    <a href="{{ route('Guru.Materi.create', ['id_kursus' => $id_kursus]) }}"
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center">
+                        <i class="fas fa-plus mr-2"></i> Tambahkan
+                    </a>
+                </div>
+                @foreach ($materi->sortBy('tanggal_materi') as $exam)
+                    <h4 class="text-lg font-semibold mb-2">
+                        {{ \Carbon\Carbon::parse($exam->tanggal_materi)->format('d M Y') }}
+                    </h4>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex-grow">
+                            <div class="exam-container">
+                                <strong>{{ $exam->judul_materi }} </strong>
+                                <p>{{ $exam->deskripsi }}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-5 justify-end">
+                            <form action="{{ route('Guru.Materi.destroy', $exam->id_materi) }}" method="POST"
+                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus soal ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 flex items-center hover:text-red-700">
+                                    <i class="fas fa-trash-alt mr-1"></i> Delete
+                                </button>
+                            </form>
+
+                            <form action="{{ route('Guru.Materi.edit', $exam->id_materi) }}" method="GET">
+                                <input type="hidden" name="id_kursus" value="{{ $id_kursus }}">
+                                <button type="submit" class="text-blue-500 flex items-center hover:text-blue-700">
+                                    <i class="fas fa-edit mr-1"></i> Edit
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="successModal"
+            tabindex="-1">
+            <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-teal-700">
+                        Berhasil Menambahkan Data
+                    </h3>
+                    <button aria-label="Close modal" class="text-gray-600 hover:text-gray-900 text-2xl font-bold"
+                        id="closeModalBtn">
+                        ×
+                    </button>
+                </div>
+                <div class="text-gray-800 text-base">
+                    @if (session('success'))
+                        {{ session('success') }}
+                    @endif
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button
+                        class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-5 rounded-md transition-colors duration-300"
+                        id="closeModalBtnFooter">
+                        Tutup
+                    </button>
+                </div>
             </div>
         </div>
         <script>

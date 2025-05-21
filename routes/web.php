@@ -57,6 +57,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('/Course', CourseController::class);
         Route::resource('/Siswa', SiswaController::class);
         Route::resource('/Latihan', LatihanSoalController::class);
+        Route::get('/Latihan/{id_latihan}/edit', [LatihanSoalController::class, 'edit'])->name('Guru.Latihan.edit');
         Route::resource('/LatihanSoalSoal', LatihanSoalSoalController::class);
         Route::resource('/Kelas', KelasController::class);
         Route::resource('/MataPelajaran', MataPelajaranController::class);

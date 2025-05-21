@@ -1,11 +1,14 @@
-a<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operator | Siswa</title>
-
+    <title>Guru | Materi | Edit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
@@ -270,9 +273,7 @@ a<!DOCTYPE html>
 <body>
     <!-- Header -->
     <div class="header">
-        <h1 class="text-2xl font-bold text-white">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
-        </h1>
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
 
         <div class="relative dropdown">
             <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
@@ -280,15 +281,13 @@ a<!DOCTYPE html>
                     <span class="text-white">Welcome, Guru</span>
                     <span class="text-white font-semibold">{{ $user->name }}</span>
                 </div>
-                <img alt="Profile picture" class="rounded-full ml-4" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
-                    width="50">
+                <i
+                    class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit"
-                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">Logout</button>
+                    <button type="submit" class="btn btn-danger w-100">Logout</button>
                 </form>
             </div>
         </div>
@@ -297,9 +296,9 @@ a<!DOCTYPE html>
     <div class="flex flex-col md:flex-row">
         <div class="sidebar">
             <a
-                href="{{ route('Guru.Course.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
+                href="{{ route('Guru.Course.index') }}"class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
                 <i class="fas fa-book-open text-sm"></i>
-                <span>Course</span>
+                <span>Kursus</span>
             </a>
             <a
                 href="{{ route('Guru.Latihan.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
@@ -317,36 +316,50 @@ a<!DOCTYPE html>
         <!-- Main Content -->
         <div class="main-content">
             <div class="bg-white p-6 rounded-lg shadow-md h-full w-full">
-                <form action="{{ route('Guru.Materi.update', $materi->id_materi) }}" method="POST" enctype="multipart/form-data">
+                <nav class="text-gray-600 text-lg mb-4" aria-label="Breadcrumb">
+                    <ol class="list-reset flex">
+                        <li><a href="{{ route('Guru.Course.index') }}" class="text-blue-600 hover:underline">Course</a>
+                        </li>
+                        <li><span class="mx-2">/</span></li>
+                        <li><a href="{{ route('Guru.Materi.index', ['id_kursus' => $course->id_kursus]) }}"
+                                class="text-blue-600 hover:underline">Materi</a></li>
+                        <li><span class="mx-2">/</span></li>
+                        <li><a href="" class="text-blue-600 hover:underline">Edit Materi</a></li>
+                    </ol>
+                </nav>
+                <form action="{{ route('Guru.Materi.update', $materi->id_materi) }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('PUT') <!-- Menentukan bahwa metode form adalah PUT untuk update -->
-                
+
                     <div class="mb-4">
                         <label for="judul_materi" class="block font-bold mb-2">Topik Materi</label>
-                        <input type="text" value="{{ old('judul_materi', $materi->judul_materi) }}" name="judul_materi" class="block w-full p-2 border border-gray-300 rounded-md" required>
+                        <input type="text" value="{{ old('judul_materi', $materi->judul_materi) }}"
+                            name="judul_materi" class="block w-full p-2 border border-gray-300 rounded-md" required>
                     </div>
-                
+
                     <div class="mb-4">
                         <label for="deskripsi" class="block font-bold mb-2">Deskripsi</label>
                         <textarea name="deskripsi" class="w-full border p-2" rows="5" required>{{ old('deskripsi', $materi->deskripsi) }}</textarea>
                     </div>
-                
+
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="file_upload">Upload File</label>
-                        <input type="file" id="file_upload" name="file" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <input type="file" id="file_upload" name="file"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     </div>
-                
+
                     <input type="hidden" name="id_kursus" value="{{ $id_kursus }}">
                     <input type="hidden" name="id_materi" value="{{ $materi->id_materi }}">
-                
+
                     <div class="flex justify-end mt-4">
-                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
+                        <button type="submit"
+                            class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
                             <span>Simpan</span>
                             <i class="fas fa-check ml-2"></i>
                         </button>
                     </div>
                 </form>
-                
             </div>
 
         </div>

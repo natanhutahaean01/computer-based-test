@@ -339,7 +339,7 @@
                             @enderror
                         </div>
                         <div class="mb-4">
-                            <label class="block font-bold mb-2 text-blue-600">NIS</label>
+                            <label class="block font-bold mb-2 text-blue-600">NISN</label>
                             <input type="number" name="nis"
                                 class="block w-full p-2 border border-gray-300 rounded-md" required>
                             @error('nis')

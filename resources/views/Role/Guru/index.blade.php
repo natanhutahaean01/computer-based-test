@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operator | Siswa</title>
-
+    <title>Guru | Course</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         /* General Styles */
         body {
@@ -270,9 +271,7 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <h1 class="text-2xl font-bold text-white">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
-        </h1>
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
 
         <div class="relative dropdown">
             <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
@@ -280,17 +279,13 @@
                     <span class="text-white">Welcome, Guru</span>
                     <span class="text-white font-semibold">{{ $user->name }}</span>
                 </div>
-                <img alt="Profile picture" class="rounded-full ml-4" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
-                    width="50">
+                <i
+                    class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
-            <!-- Dropdown Menu -->
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="logout-btn">
-                        <span>Logout</span>
-                    </button>
+                    <button type="submit" class="btn btn-danger w-100">Logout</button>
                 </form>
             </div>
         </div>
@@ -300,9 +295,9 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <a
-                href="{{ route('Guru.Course.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
+                href="{{ route('Guru.Course.index') }}"class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
                 <i class="fas fa-book-open text-sm"></i>
-                <span>Course</span>
+                <span>Kursus</span>
             </a>
             <a
                 href="{{ route('Guru.Latihan.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
@@ -316,8 +311,6 @@
                 <span>Nilai</span>
             </a>
         </div>
-
-        <!-- Main Content -->
         <div class="main-content">
             <div class="flex justify-end mb-4">
                 <a href="{{ route('Guru.Course.create') }}"
@@ -325,101 +318,132 @@
                     <i class="fas fa-plus mr-2"></i> Tambahkan
                 </a>
             </div>
-            <div class="w-full bg-white p-6 shadow-md">
+            <div class="bg-white p-4 md:p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-bold mb-4 text-blue-600">
-                    Course Information
+                    Kursus Information
                 </h2>
                 <div class="space-y-4">
-                    <!-- Loop through the courses to display each course dynamically -->
-                    @foreach ($courses as $course)
-                        <div
-                            class="p-4 border rounded-lg shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                            <div class="flex items-center mb-4 sm:mb-0">
-                                <!-- Display course image dynamically -->
-                                <img alt="Thumbnail image of the {{ $course->nama_kursus }} course"
-                                    class="w-24 h-24 rounded-lg mr-4 object-cover" height="100"
-                                    src="{{ $course->image_url }}" width="100" />
+                    <div class="mb-4">
+                        @foreach ($courses as $course)
+                            <div
+                                class="bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center">
+                                <div class="flex items-center mb-4 sm:mb-0">
+                                    <img alt="Thumbnail image of the {{ $course->nama_kursus }} course"
+                                        class="w-24 h-24 rounded-lg mr-4 object-cover" height="100"
+                                        src="{{ $course->image_url }}" width="100" />
 
-                                <div>
-                                    <!-- Display course name dynamically -->
-                                    <h3 class="text-lg font-semibold text-gray-800">
-                                        <a href="{{ route('Guru.Materi.index', ['id_kursus' => $course->id_kursus]) }}"
-                                            class="text-blue-600 no-underline hover:underline">
-                                            {{ $course->nama_kursus }}
-                                        </a>
-                                    </h3>
+                                    <div>
+                                        <h4 class="text-2xl font-bold text-teal-700">
+                                            <a href="{{ route('Guru.Materi.index', ['id_kursus' => $course->id_kursus]) }}"
+                                                class="no-underline hover:underline">
+                                                {{ $course->nama_kursus }}
+                                            </a>
+                                        </h4>
+                                    </div>
+                                </div>
+
+                                <div class="flex space-x-5 justify-end">
+                                    <!-- Form to delete the course -->
+                                    <form action="{{ route('Guru.Course.destroy', $course->id_kursus) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus course ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="text-red-500 flex items-center hover:text-red-700">
+                                            <i class="fas fa-trash-alt mr-1"></i> Delete
+                                        </button>
+                                    </form>
+
+                                    <form action="{{ route('Guru.Course.edit', $course->id_kursus) }}" method="GET">
+                                        <button type="submit"
+                                            class="text-blue-500 flex items-center hover:text-blue-700">
+                                            <i class="fas fa-edit mr-1"></i> Edit
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
-
-                            <div class="flex space-x-5 justify-end">
-                                <!-- Form to delete the course -->
-                                <form action="{{ route('Guru.Course.destroy', $course->id_kursus) }}" method="POST"
-                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus course ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-500 flex items-center hover:text-red-700">
-                                        <i class="fas fa-trash-alt mr-1"></i> DELETE
-                                    </button>
-                                </form>
-
-                                <!-- Form to edit the course -->
-                                <form action="{{ route('Guru.Course.edit', $course->id_kursus) }}" method="GET">
-                                    <button type="submit" class="text-blue-500 flex items-center hover:text-blue-700">
-                                        <i class="fas fa-edit mr-1"></i> EDIT
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+      <!-- Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Berhasil Menambahkan Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if (session('success'))
+                        {{ session('success') }}
+                    @endif
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- JavaScript to show modal if success message exists and auto-close after 3 seconds -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Dropdown toggle script
-        const dropdownButton = document.getElementById('dropdownButton');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        const dropdownIcon = document.getElementById('dropdownIcon');
+        // Menampilkan modal otomatis jika session success ada
+        @if (session('success'))
+            var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+            myModal.show();
 
-        dropdownButton.addEventListener('click', () => {
-            const isExpanded = dropdownButton.getAttribute('aria-expanded') === 'true';
-            dropdownButton.setAttribute('aria-expanded', !isExpanded);
+            // Menutup modal setelah 3 detik
+            setTimeout(function() {
+                myModal.hide();
+            }, 3000); // 3000ms = 3 detik
+        @endif
+                // Dropdown toggle script
+                const dropdownButton = document.getElementById('dropdownButton');
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                const dropdownIcon = document.getElementById('dropdownIcon');
 
-            if (dropdownMenu.style.maxHeight && dropdownMenu.style.maxHeight !== '0px') {
+                dropdownButton.addEventListener('click', () => {
+                    const isExpanded = dropdownButton.getAttribute('aria-expanded') === 'true';
+                    dropdownButton.setAttribute('aria-expanded', !isExpanded);
+
+                    if (dropdownMenu.style.maxHeight && dropdownMenu.style.maxHeight !== '0px') {
+                        dropdownMenu.style.maxHeight = '0px';
+                        dropdownMenu.style.paddingTop = '0';
+                        dropdownMenu.style.paddingBottom = '0';
+                        dropdownIcon.style.transform = 'rotate(0deg)';
+                    } else {
+                        dropdownMenu.style.maxHeight = dropdownMenu.scrollHeight + 'px';
+                        dropdownMenu.style.paddingTop = '0.5rem';
+                        dropdownMenu.style.paddingBottom = '0.5rem';
+                        dropdownIcon.style.transform = 'rotate(180deg)';
+                    }
+                });
+
+                // Close dropdown if clicked outside
+                window.addEventListener('click', (e) => {
+                    if (!dropdownButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.style.maxHeight = '0px';
+                        dropdownMenu.style.paddingTop = '0';
+                        dropdownMenu.style.paddingBottom = '0';
+                        dropdownButton.setAttribute('aria-expanded', 'false');
+                        dropdownIcon.style.transform = 'rotate(0deg)';
+                    }
+                });
+
+                // Initialize dropdown closed
                 dropdownMenu.style.maxHeight = '0px';
-                dropdownMenu.style.paddingTop = '0';
-                dropdownMenu.style.paddingBottom = '0';
-                dropdownIcon.style.transform = 'rotate(0deg)';
-            } else {
-                dropdownMenu.style.maxHeight = dropdownMenu.scrollHeight + 'px';
-                dropdownMenu.style.paddingTop = '0.5rem';
-                dropdownMenu.style.paddingBottom = '0.5rem';
-                dropdownIcon.style.transform = 'rotate(180deg)';
-            }
-        });
+                dropdownMenu.style.overflow = 'hidden';
+                dropdownMenu.style.transition = 'max-height 0.3s ease, padding 0.3s ease';
 
-        // Close dropdown if clicked outside
-        window.addEventListener('click', (e) => {
-            if (!dropdownButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                dropdownMenu.style.maxHeight = '0px';
-                dropdownMenu.style.paddingTop = '0';
-                dropdownMenu.style.paddingBottom = '0';
-                dropdownButton.setAttribute('aria-expanded', 'false');
-                dropdownIcon.style.transform = 'rotate(0deg)';
-            }
-        });
-
-        // Initialize dropdown closed
-        dropdownMenu.style.maxHeight = '0px';
-        dropdownMenu.style.overflow = 'hidden';
-        dropdownMenu.style.transition = 'max-height 0.3s ease, padding 0.3s ease';
-
-        function toggleDropdown() {
-            const dropdown = document.getElementById("dropdown-menu");
-            dropdown.classList.toggle("show");
-        }
-    </script>
+                function toggleDropdown() {
+                    const dropdown = document.getElementById("dropdown-menu");
+                    dropdown.classList.toggle("show");
+                }
+            </script>
 </body>
 
 </html>

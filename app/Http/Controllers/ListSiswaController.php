@@ -25,13 +25,22 @@ class ListSiswaController extends Controller
             ->where('id_kursus', $id_kursus)
             ->get();
 
-        if (!$persentase) {
-            return redirect()->back()->with('error', 'Persentase tidak ditemukan untuk kursus ini');
+        if ($persentase->isEmpty()) {
+return redirect()->back()->with('error', 'Persentase belum didefinisikan. Silakan definisikan persentase terlebih dahulu pada bagian Nilai.');
         }
 
         $kursus = Kursus::findOrFail($id_kursus);
 
-        $kursus = $persentase->first()->kursus;
+        if (!$kursus->persentase) {
+            return redirect()->back()->with('error', 'Persentase belum didefinisikan. Silakan definisikan persentase terlebih dahulu.');
+        }
+
+        $firstPersentase = $persentase->first();
+        if ($firstPersentase) {
+            $kursus = $firstPersentase->kursus;
+        } else {
+            return redirect()->back()->with('error', 'Persentase pertama tidak ditemukan');
+        }
 
         $siswa = $kursus->siswa()->with('kelas')->orderBy('nama_siswa')->get();
 

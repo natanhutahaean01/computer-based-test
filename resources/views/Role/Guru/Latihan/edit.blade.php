@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <title>
-        Operator | Siswa
+        Guru | Latihan | Edit
     </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
@@ -266,15 +266,20 @@
                 z-index: 1000;
             }
         }
+
+        .alert-danger {
+            color: #e74c3c;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
     </style>
 </head>
 
 <body>
     <!-- Header -->
     <header class="header" role="banner">
-        <a href="#" class="logo flex items-center" aria-label="Homepage">
-            <img src="{{ asset('images/logo.png') }}" alt="Company logo with green and teal colors" />
-        </a>
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
 
         <div class="relative dropdown" id="userDropdown">
             <div class="user-info flex items-center" onclick="toggleDropdown()" tabindex="0" role="button"
@@ -283,45 +288,37 @@
                     <span class="text-white select-none">Welcome, Guru</span>
                     <span class="text-white font-semibold select-text truncate max-w-[140px]">{{ $user->name }}</span>
                 </div>
-                <img alt="Profile picture of {{ $user->name }}" class="rounded-full ml-4" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
-                    width="50" />
+                <i
+                    class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
-            <div id="dropdown-menu" class="dropdown-menu" role="menu" aria-label="User menu">
-                <form action="{{ route('logout') }}" method="POST" class="m-0">
+            <div id="dropdown-menu" class="dropdown-menu">
+                <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="logout-btn" role="menuitem" tabindex="0">
-                        <span>Logout</span>
-                    </button>
+                    <button type="submit" class="btn btn-danger w-100">Logout</button>
                 </form>
             </div>
         </div>
     </header>
     <div class="flex flex-col md:flex-row min-h-screen">
         <!-- Sidebar -->
-        <nav aria-label="Sidebar navigation" class="sidebar">
-            <a aria-current="page" class="active" href="#">
-                <i aria-hidden="true" class="fas fa-book-open">
-                </i>
-                <span>
-                    Course
-                </span>
+        <div class="sidebar">
+            <a
+                href="{{ route('Guru.Course.index') }}"class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
+                <i class="fas fa-book-open text-sm"></i>
+                <span>Course</span>
             </a>
-            <a href="#">
-                <i aria-hidden="true" class="fas fa-pen">
-                </i>
-                <span>
-                    Latihan Soal
-                </span>
+            <a
+                href="{{ route('Guru.Latihan.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
+                <i class="fas fa-pen text-sm"></i>
+                <span>Latihan Soal</span>
             </a>
-            <a href="#">
-                <i aria-hidden="true" class="fas fa-chart-line">
-                </i>
-                <span>
-                    Nilai
-                </span>
+
+            <a
+                href="{{ route('Guru.Nilai.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
+                <i class="fas fa-chart-line text-sm"></i>
+                <span>Nilai</span>
             </a>
-        </nav>
+        </div>
         <!-- Main Content -->
         <div class="main-content">
             <div class="bg-white p-6 rounded-lg shadow-md h-full w-full">
@@ -329,130 +326,115 @@
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <div>
-                        <label class="block font-bold mb-2 text-gray-700" for="Topik">
-                            Topik Latihan
-                        </label>
-                        <input
-                            class="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            id="Topik" name="Topik" required="" type="text" />
+
+                    <div class="mb-4">
+                        <label for="Topik" class="block font-bold mb-2">Topik Latihan</label>
+                        <input type="text" name="Topik" value="{{ old('Topik', $latihan->Topik) }}"
+                            class="block w-full p-2 border border-gray-300 rounded-md" required>
+                             @error('Topik')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
+                            
+
                     </div>
-                    <div>
-                        <label class="block font-bold mb-2 text-gray-700" for="id_kurikulum">
-                            Pilih Kurikulum
-                        </label>
-                        <select
-                            class="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            id="id_kurikulum" name="id_kurikulum" required="">
-                            <option disabled="" selected="" value="">
-                                Pilih kurikulum
+
+                    <div class="mb-4">
+                        <label for="id_kurikulum" class="block font-bold mb-2">Pilih Kurikulum</label>
+                        <select name="id_kurikulum" id="id_kurikulum"
+                            class="block w-full p-2 border border-gray-300 rounded-md" required>
+                            <option value="" disabled>Pilih kurikulum</option>
+                            @foreach ($kurikulums as $k)
+                                <option value="{{ $k->id_kurikulum }}"
+                                    {{ old('id_kurikulum', $latihan->id_kurikulum) == $k->id_kurikulum ? 'selected' : '' }}>
+                                    {{ $k->nama_kurikulum }}
+                                </option>
+                            @endforeach
+                        </select>
+                          @error('id_kurikulum')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="id_mata_pelajaran" class="block font-bold mb-2">Pilih Mata Pelajaran</label>
+                        <select name="id_mata_pelajaran" id="id_mata_pelajaran"
+                            class="block w-full p-2 border border-gray-300 rounded-md" required>
+                            <option value="" disabled>Pilih Mata Pelajaran</option>
+                            @foreach ($mataPelajarans as $mapel)
+                                <option value="{{ $mapel->id_mata_pelajaran }}"
+                                    data-kurikulum="{{ $mapel->id_kurikulum }}"
+                                    {{ old('id_mata_pelajaran', $latihan->id_mata_pelajaran) == $mapel->id_mata_pelajaran ? 'selected' : '' }}>
+                                    {{ $mapel->nama_mata_pelajaran }}
+                                </option>
+                            @endforeach
+                        </select>
+                                @error('id_mata_pelajaran')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="id_kelas" class="block font-bold mb-2">Pilih Kelas</label>
+                        <select name="id_kelas" class="block w-full p-2 border border-gray-300 rounded-md" required>
+                            <option value="" disabled>Pilih kelas</option>
+                            @foreach ($kelas as $class)
+                                <option value="{{ $class->id_kelas }}"
+                                    {{ old('id_kelas', $latihan->id_kelas) == $class->id_kelas ? 'selected' : '' }}>
+                                    {{ $class->nama_kelas }}
+                                </option>
+                            @endforeach
+                        </select>
+                         @error('id_kelas')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="acak" class="block font-bold mb-2">Acak Soal dan Pilihan</label>
+                        <select name="acak" class="block w-full p-2 border border-gray-300 rounded-md" required>
+                            <option value="" disabled>Pilih opsi</option>
+                            <option value="Aktif" {{ old('acak', $latihan->acak) == 'Aktif' ? 'selected' : '' }}>Aktif
                             </option>
-                            <option value="1">
-                                Kurikulum 2013
-                            </option>
-                            <option value="2">
-                                Kurikulum Merdeka
-                            </option>
-                            <option value="3">
-                                Kurikulum KTSP
+                            <option value="Tidak Aktif"
+                                {{ old('acak', $latihan->acak) == 'Tidak Aktif' ? 'selected' : '' }}>Tidak Aktif
                             </option>
                         </select>
+                        @error('acak')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
-                    <div>
-                        <label class="block font-bold mb-2 text-gray-700" for="id_mata_pelajaran">
-                            Pilih Mata Pelajaran
-                        </label>
-                        <select
-                            class="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            id="id_mata_pelajaran" name="id_mata_pelajaran" required="">
-                            <option disabled="" selected="" value="">
-                                Pilih Mata Pelajaran
-                            </option>
-                            <option value="1">
-                                Matematika
-                            </option>
-                            <option value="2">
-                                Bahasa Indonesia
-                            </option>
-                            <option value="3">
-                                IPA
-                            </option>
+
+                    <div class="mb-4">
+                        <label for="status_jawaban" class="block font-bold mb-2">Status Jawaban</label>
+                        <select name="status_jawaban" class="block w-full p-2 border border-gray-300 rounded-md"
+                            required>
+                            <option value="" disabled>Pilih opsi</option>
+                            <option value="Aktif"
+                                {{ old('status_jawaban', $latihan->status_jawaban) == 'Aktif' ? 'selected' : '' }}>
+                                Aktif</option>
+                            <option value="Tidak Aktif"
+                                {{ old('status_jawaban', $latihan->status_jawaban) == 'Tidak Aktif' ? 'selected' : '' }}>
+                                Tidak Aktif</option>
                         </select>
+                                  @error('status_jawaban')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
-                    <div>
-                        <label class="block font-bold mb-2 text-gray-700" for="id_kelas">
-                            Pilih Kelas
-                        </label>
-                        <select
-                            class="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            id="id_kelas" name="id_kelas" required="">
-                            <option disabled="" selected="" value="">
-                                Pilih kelas
-                            </option>
-                            <option value="1">
-                                Kelas 7
-                            </option>
-                            <option value="2">
-                                Kelas 8
-                            </option>
-                            <option value="3">
-                                Kelas 9
-                            </option>
-                        </select>
+
+                    <div class="mb-4">
+                        <label for="grade" class="block font-bold mb-2">Grade</label>
+                        <input type="number" name="grade" value="{{ old('grade', $latihan->grade) }}"
+                            class="block w-full p-2 border border-gray-300 rounded-md" required>
+                           @error('grade')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
-                    <div>
-                        <label class="block font-bold mb-2 text-gray-700" for="acak">
-                            Acak Soal dan Pilihan
-                        </label>
-                        <select
-                            class="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            id="acak" name="acak" required="">
-                            <option disabled="" selected="" value="">
-                                Pilih opsi
-                            </option>
-                            <option value="Aktif">
-                                Aktif
-                            </option>
-                            <option value="Tidak Aktif">
-                                Tidak Aktif
-                            </option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-2 text-gray-700" for="status_jawaban">
-                            Status Jawaban
-                        </label>
-                        <select
-                            class="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            id="status_jawaban" name="status_jawaban" required="">
-                            <option disabled="" selected="" value="">
-                                Pilih opsi
-                            </option>
-                            <option value="Aktif">
-                                Aktif
-                            </option>
-                            <option value="Tidak Aktif">
-                                Tidak Aktif
-                            </option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-2 text-gray-700" for="grade">
-                            Grade
-                        </label>
-                        <input
-                            class="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
-                            id="grade" name="grade" required="" type="number" />
-                    </div>
-                    <div class="flex justify-end">
-                        <button
-                            class="bg-green-500 text-white px-6 py-3 rounded-lg flex items-center hover:bg-green-400 transition"
-                            type="submit">
-                            <span>
-                                Simpan
-                            </span>
-                            <i class="fas fa-check ml-2">
-                            </i>
+
+                    <div class="flex justify-end mt-4">
+                        <button type="submit"
+                            class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
+                            <span>Simpan</span>
+                            <i class="fas fa-check ml-2"></i>
                         </button>
                     </div>
                 </form>
@@ -472,6 +454,20 @@
                 if (!dropdown.contains(e.target)) {
                     menu.classList.remove('show');
                 }
+            });
+
+            document.getElementById('id_kurikulum').addEventListener('change', function() {
+                const selectedKurikulum = this.value;
+                const mapelOptions = document.querySelectorAll('#id_mata_pelajaran option');
+
+                mapelOptions.forEach(option => {
+                    const itemKurikulum = option.getAttribute('data-kurikulum');
+                    if (selectedKurikulum === '' || itemKurikulum === selectedKurikulum) {
+                        option.style.display = 'block'; // Show the option
+                    } else {
+                        option.style.display = 'none'; // Hide the option
+                    }
+                });
             });
         </script>
 </body>

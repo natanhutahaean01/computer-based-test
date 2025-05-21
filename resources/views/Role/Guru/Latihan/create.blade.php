@@ -4,8 +4,12 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <title>
-        Operator | Siswa
+ Guru | Latihan | Tambah
     </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <style>
@@ -278,9 +282,7 @@
 <body>
     <!-- Header -->
     <header class="header" role="banner">
-        <a href="#" class="logo flex items-center" aria-label="Homepage">
-            <img src="{{ asset('images/logo.png') }}" alt="Company logo with green and teal colors" />
-        </a>
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
 
         <div class="relative dropdown" id="userDropdown">
             <div class="user-info flex items-center" onclick="toggleDropdown()" tabindex="0" role="button"
@@ -289,45 +291,36 @@
                     <span class="text-white select-none">Welcome, Guru</span>
                     <span class="text-white font-semibold select-text truncate max-w-[140px]">{{ $user->name }}</span>
                 </div>
-                <img alt="Profile picture of {{ $user->name }}" class="rounded-full ml-4" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
-                    width="50" />
+                <i
+                    class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
-            <div id="dropdown-menu" class="dropdown-menu" role="menu" aria-label="User menu">
-                <form action="{{ route('logout') }}" method="POST" class="m-0">
+            <div id="dropdown-menu" class="dropdown-menu">
+                <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="logout-btn" role="menuitem" tabindex="0">
-                        <span>Logout</span>
-                    </button>
+                    <button type="submit" class="btn btn-danger w-100">Logout</button>
                 </form>
             </div>
         </div>
     </header>
     <div class="flex flex-col md:flex-row min-h-screen">
-        <!-- Sidebar -->
-        <nav aria-label="Sidebar navigation" class="sidebar">
-            <a aria-current="page" class="active" href="#">
-                <i aria-hidden="true" class="fas fa-book-open">
-                </i>
-                <span>
-                    Course
-                </span>
+        <div class="sidebar">
+            <a
+                href="{{ route('Guru.Course.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
+                <i class="fas fa-book-open text-sm"></i>
+                <span>Kursus</span>
             </a>
-            <a href="#">
-                <i aria-hidden="true" class="fas fa-pen">
-                </i>
-                <span>
-                    Latihan Soal
-                </span>
+            <a
+                href="{{ route('Guru.Latihan.index') }}"class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
+                <i class="fas fa-pen text-sm"></i>
+                <span>Latihan Soal</span>
             </a>
-            <a href="#">
-                <i aria-hidden="true" class="fas fa-chart-line">
-                </i>
-                <span>
-                    Nilai
-                </span>
+
+            <a
+                href="{{ route('Guru.Nilai.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
+                <i class="fas fa-chart-line text-sm"></i>
+                <span>Nilai</span>
             </a>
-        </nav>
+        </div>
         <!-- Main Content -->
         <div class="main-content">
             <div class="bg-white p-6 rounded-lg shadow-md h-full w-full">
@@ -335,85 +328,98 @@
                     @csrf
                     <div class="mb-4">
                         <label for="Topik" class="block font-bold mb-2">Topik Latihan</label>
-                        <input type="text" name="Topik" class="block w-full p-2 border border-gray-300 rounded-md"
-                            required>
+                        <input type="text" name="Topik" class="block w-full p-2 border border-gray-300 rounded-md" >
+                        @error('Topik')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label for="id_kurikulum" class="block font-bold mb-2">Pilih Kurikulum</label>
-                        <select name="id_kurikulum" id="id_kurikulum"
-                            class="block w-full p-2 border border-gray-300 rounded-md" required>
+                        <select name="id_kurikulum" id="id_kurikulum" class="block w-full p-2 border border-gray-300 rounded-md" >
                             <option value="" disabled selected>Pilih kurikulum</option>
                             @foreach ($kurikulums as $k)
-                                <option value="{{ $k->id_kurikulum }}"
-                                    {{ old('id_kurikulum') == $k->id_kurikulum ? 'selected' : '' }}>
+                                <option value="{{ $k->id_kurikulum }}" {{ old('id_kurikulum') == $k->id_kurikulum ? 'selected' : '' }}>
                                     {{ $k->nama_kurikulum }}
                                 </option>
                             @endforeach
                         </select>
+                        @error('id_kurikulum')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
-
 
                     <div class="mb-4">
                         <label for="id_mata_pelajaran" class="block font-bold mb-2">Pilih Mata Pelajaran</label>
-                        <select name="id_mata_pelajaran" id="id_mata_pelajaran"
-                            class="block w-full p-2 border border-gray-300 rounded-md" required>
+                        <select name="id_mata_pelajaran" id="id_mata_pelajaran" class="block w-full p-2 border border-gray-300 rounded-md">
                             <option value="" disabled selected>Pilih Mata Pelajaran</option>
                             @foreach ($mataPelajarans as $mapel)
-                                <option value="{{ $mapel->id_mata_pelajaran }}"
-                                    data-kurikulum="{{ $mapel->id_kurikulum }}">
+                                <option value="{{ $mapel->id_mata_pelajaran }}" data-kurikulum="{{ $mapel->id_kurikulum }}">
                                     {{ $mapel->nama_mata_pelajaran }}
                                 </option>
                             @endforeach
                         </select>
+                        @error('id_mata_pelajaran')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label for="id_kelas" class="block font-bold mb-2">Pilih Kelas</label>
-                        <select name="id_kelas" class="block w-full p-2 border border-gray-300 rounded-md" required>
+                        <select name="id_kelas" class="block w-full p-2 border border-gray-300 rounded-md">
                             <option value="" disabled selected>Pilih kelas</option>
                             @foreach ($kelas as $class)
                                 <option value="{{ $class->id_kelas }}">{{ $class->nama_kelas }}</option>
                             @endforeach
                         </select>
+                        @error('id_kelas')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label for="acak" class="block font-bold mb-2">Acak Soal dan Pilihan</label>
-                        <select name="acak" class="block w-full p-2 border border-gray-300 rounded-md" required>
+                        <select name="acak" class="block w-full p-2 border border-gray-300 rounded-md">
                             <option value="" disabled selected>Pilih opsi</option>
                             <option value="Aktif">Aktif</option>
                             <option value="Tidak Aktif">Tidak Aktif</option>
                         </select>
+                        @error('acak')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label for="status_jawaban" class="block font-bold mb-2">Status Jawaban</label>
-                        <select name="status_jawaban" class="block w-full p-2 border border-gray-300 rounded-md"
-                            required>
+                        <select name="status_jawaban" class="block w-full p-2 border border-gray-300 rounded-md">
                             <option value="" disabled selected>Pilih opsi</option>
                             <option value="Aktif">Aktif</option>
                             <option value="Tidak Aktif">Tidak Aktif</option>
                         </select>
+                        @error('status_jawaban')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="mb-4">
                         <label for="grade" class="block font-bold mb-2">Grade</label>
-                        <input type="number" name="grade"
-                            class="block w-full p-2 border border-gray-300 rounded-md" required>
+                        <input type="number" name="grade" class="block w-full p-2 border border-gray-300 rounded-md" >
+                        @error('grade')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="flex justify-end mt-4">
-                        <button type="submit"
-                            class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
+                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
                             <span>Simpan</span>
                             <i class="fas fa-check ml-2"></i>
                         </button>
                     </div>
                 </form>
             </div>
-            </main>
         </div>
+    </div>
+
         <script>
             function toggleDropdown() {
                 const menu = document.getElementById('dropdown-menu');

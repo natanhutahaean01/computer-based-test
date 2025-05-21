@@ -8,10 +8,10 @@
     </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-        <style>
-          body {
+    <style>
+        body {
             background-color: #f4f5f7;
             font-family: 'Arial', sans-serif;
             padding: 0;
@@ -99,7 +99,7 @@
 
         /* Sidebar Styles */
         .sidebar {
-            background: linear-gradient(to bottom,#00796b, #00bfae, #00796b);
+            background: linear-gradient(to bottom, #00796b, #00bfae, #00796b);
             width: 260px;
             padding: 25px 15px;
             position: fixed;
@@ -111,7 +111,7 @@
             gap: 20px;
             transition: all 0.3s ease;
             z-index: 900;
-       
+
         }
 
         .sidebar a {
@@ -142,7 +142,8 @@
             color: white;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-              /* Main Content */
+
+        /* Main Content */
         .main-content {
             margin-left: 280px;
             padding: 100px 30px 30px;
@@ -159,114 +160,112 @@
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
-        </style>
+    </style>
 </head>
 
 
-   <!-- Header -->
-    <div class="header">
-        <h1 class="text-2xl font-bold text-white">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
-        </h1>
-        
-        <div class="relative dropdown">
-            <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
-                <div class="flex flex-col items-center">
-                    <span class="text-white">Admin</span>
-              
-                </div>
-                <img alt="Profile picture" class="rounded-full ml-4" height="50" src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg" width="50">
+<!-- Header -->
+<div class="header">
+    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
+
+    <div class="relative dropdown">
+        <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
+            <div class="flex flex-col items-center">
+                <span class="text-white">Admin</span>
+
             </div>
-            <div id="dropdown-menu" class="dropdown-menu">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">Logout</button>
-                </form>
-            </div>
+            <i
+                class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
+        </div>
+        <div id="dropdown-menu" class="dropdown-menu">
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-danger w-100">Logout</button>
+            </form>
         </div>
     </div>
+</div>
 
- 
 
 
-        <div class="flex flex-col md:flex-row">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <ul>
-                <li class="mb-4">
-                    <a href="{{ route('Admin.Akun.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
-                        <i class="fas fa-calendar-alt text-white mr-2"></i> Operator
-                    </a>
-                </li>
-                <li class="mb-4">
-                    <a href="{{ route('Admin.Bisnis.index') }}" class="flex items-center text-black shadow p-2 rounded-lg hover:bg-blue-500">
-                        <i class="fas fa-book text-black mr-2"></i> Bisnis
-                    </a>
-                </li>
-            </ul>
-        </div>
-        
-        <!-- Main Content -->
-         
-     <div class="main-content">
- 
-                <div class="flex justify-end mb-4">
-                <a href="{{ route('Admin.Bisnis.create') }}"
-                    class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
-                    <i class="fas fa-plus mr-2"></i> Tambahkan 
+
+<div class="flex flex-col md:flex-row">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul>
+            <li class="mb-4">
+                <a href="{{ route('Admin.Akun.index') }}"
+                    class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <i class="fas fa-calendar-alt text-white mr-2"></i> Operator
                 </a>
-            </div>
-            <h2 class="text-xl font-bold mb-4 text-blue-600">Informasi Operator</h2>
-            @foreach ($bisnises as $bisnis)
-                <section
-                    class="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
-                    <div class="flex flex-col space-y-2 max-w-xl">
-                        <h2 class="text-2xl font-bold text-teal-700">
-                            {{ $bisnis['nama_sekolah'] }}
-                        </h2>
-                        <p class="text-gray-700 text-base">
-                            Email:
-                            <span class="font-semibold text-black">
-                                {{ $bisnis->jumlah_pendapatan}}
+            </li>
+            <li class="mb-4">
+                <a href="{{ route('Admin.Bisnis.index') }}"
+                    class="flex items-center text-black shadow p-2 rounded-lg hover:bg-blue-500">
+                    <i class="fas fa-book text-black mr-2"></i> Bisnis
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+
+    <div class="main-content">
+
+        <div class="flex justify-end mb-4">
+            <a href="{{ route('Admin.Bisnis.create') }}"
+                class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
+                <i class="fas fa-plus mr-2"></i> Tambahkan
+            </a>
+        </div>
+        <h2 class="text-xl font-bold mb-4 text-blue-600">Informasi Bisnis</h2>
+        @foreach ($bisnises as $bisnis)
+            <section
+                class="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
+                <div class="flex flex-col space-y-2 max-w-xl">
+                    <h2 class="text-2xl font-bold text-teal-700">
+                        {{ $bisnis['nama_sekolah'] }}
+                    </h2>
+                    <p class="text-gray-700 text-base">
+                        Email:
+                        <span class="font-semibold text-black">
+                            {{ $bisnis->jumlah_pendapatan }}
+                        </span>
+                    </p>
+
+
+                </div>
+                <div class="flex space-x-6">
+                    <form action="{{ route('Admin.Bisnis.destroy', $bisnis->id_bisnis) }}" class="flex items-center"
+                        method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun ini?');">
+                        @csrf
+                        @method('DELETE')
+                        <button
+                            class="flex items-center space-x-2 text-red-600 hover:text-red-500 font-semibold transition-transform duration-300 transform hover:scale-110"
+                            type="submit">
+                            <i class="fas fa-trash-alt text-lg">
+                            </i>
+                            <span>
+                                Hapus
                             </span>
-                        </p>
-                        
-                        
-                    </div>
-                    <div class="flex space-x-6">
-                        <form action="{{ route('Admin.Bisnis.destroy', $bisnis->id_bisnis) }}"
-                            class="flex items-center" method="POST"
-                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button
-                                class="flex items-center space-x-2 text-red-600 hover:text-red-500 font-semibold transition-transform duration-300 transform hover:scale-110"
-                                type="submit">
-                                <i class="fas fa-trash-alt text-lg">
-                                </i>
-                                <span>
-                                    Hapus
-                                </span>
-                            </button>
-                        </form>
-                        <form action="{{ route('Admin.Bisnis.edit', $bisnis->id_bisnis) }}" class="flex items-center"
-                            method="GET">
-                            <button
-                                class="flex items-center space-x-2 text-teal-700 hover:text-teal-500 font-semibold transition-transform duration-300 transform hover:scale-110"
-                                type="submit">
-                                <i class="fas fa-edit text-lg">
-                                </i>
-                                <span>
-                                    Edit
-                                </span>
-                            </button>
-                        </form>
-                    </div>
-                </section>
-            @endforeach
+                        </button>
+                    </form>
+                    <form action="{{ route('Admin.Bisnis.edit', $bisnis->id_bisnis) }}" class="flex items-center"
+                        method="GET">
+                        <button class="text-blue-500 flex items-center hover:text-blue-400">
+                            <i class="fas fa-edit text-lg">
+                            </i>
+                            <span>
+                                Edit
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+        @endforeach
         </main>
     </div>
-    <!-- Modal -->
+     <!-- Modal -->
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -275,7 +274,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    @if(session('success'))
+                    @if (session('success'))
                         {{ session('success') }}
                     @endif
                 </div>
@@ -286,19 +285,19 @@
         </div>
     </div>
 
-       <!-- JavaScript to show modal if success message exists and auto-close after 3 seconds -->
-       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-       <script>
-           // Menampilkan modal otomatis jika session success ada
-           @if(session('success'))
-               var myModal = new bootstrap.Modal(document.getElementById('successModal'));
-               myModal.show();
-   
-               // Menutup modal setelah 3 detik
-               setTimeout(function() {
-                   myModal.hide();
-               }, 3000); // 3000ms = 3 detik
-           @endif
+    <!-- JavaScript to show modal if success message exists and auto-close after 3 seconds -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Menampilkan modal otomatis jika session success ada
+        @if (session('success'))
+            var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+            myModal.show();
+
+            // Menutup modal setelah 3 detik
+            setTimeout(function() {
+                myModal.hide();
+            }, 3000); // 3000ms = 3 detik
+        @endif
         // Dropdown toggle
         const userBtn = document.getElementById('userBtn');
         const dropdownMenu = document.getElementById('dropdown-menu');
@@ -337,12 +336,12 @@
             }, 3000);
         @endif
 
-            // Function to toggle dropdown visibility
+        // Function to toggle dropdown visibility
         function toggleDropdown() {
-           const dropdown = document.getElementById("dropdown-menu");
-           dropdown.classList.toggle("show");
-       }
+            const dropdown = document.getElementById("dropdown-menu");
+            dropdown.classList.toggle("show");
+        }
     </script>
-</body>
+    </body>
 
 </html>

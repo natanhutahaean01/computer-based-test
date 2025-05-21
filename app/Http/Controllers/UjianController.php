@@ -19,41 +19,41 @@ class UjianController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
-    
+
         if (!$user) {
             return redirect()->route('login'); // Redirect jika user tidak ditemukan
         }
-    
+
         $guru = Guru::where('id_user', $user->id)->first();
-    
+
         if (!$guru) {
             return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
         }
-    
+
         $id_kursus = $request->query('id_kursus');
 
         $courses = kursus::with('guru')->get(); // Ambil semua kursus
-    
+
         $course = $courses->where('id_kursus', $id_kursus)->first();
-    
+
         if (!$course) {
             return redirect()->back()->withErrors(['error' => 'Kursus yang dipilih tidak valid.']);
         }
-    
+
         $kursus = Kursus::where('id_kursus', $id_kursus)
-                        ->where('id_guru', $guru->id_guru)
-                        ->first();
-    
+            ->where('id_guru', $guru->id_guru)
+            ->first();
+
         if (!$kursus) {
             return redirect()->back()->withErrors(['error' => 'Kursus yang dipilih tidak valid.']);
         }
-    
+
         $ujians = Ujian::where('id_kursus', $kursus->id_kursus)
-                       ->orderBy('tanggal_ujian', 'DESC')
-                       ->get();
-    
+            ->orderBy('tanggal_ujian', 'DESC')
+            ->get();
+
         return view('Role.Guru.Course.index', compact('user', 'course', 'ujians', 'kursus', 'id_kursus', 'courses'));
-    }    
+    }
 
     public function create(Request $request)
     {
@@ -67,10 +67,14 @@ class UjianController extends Controller
 
         $kursus = Kursus::where('id_guru', $guru->id_guru)->get();
 
+        $courses = kursus::with('guru')->get();
+
+        $course = $courses->where('id_kursus', $id_kursus)->first();
+
         $tipeUjians = Tipe_Ujian::all();
         $user = auth()->user();
 
-        return view('Role.Guru.Course.create', compact('kursus', 'tipeUjians', 'user', 'id_kursus'));
+        return view('Role.Guru.Course.create', compact('kursus', 'courses', 'course', 'tipeUjians', 'user', 'id_kursus'));
     }
 
     public function store(Request $request)
@@ -121,10 +125,10 @@ class UjianController extends Controller
             Log::info('Ujian successfully created:', ['ujian_id' => $ujian->id_ujian]);
 
             return redirect()->route('Guru.Ujian.index', ['id_kursus' => $validated['id_kursus']])->with('success', 'Ujian berhasil ditambahkan.');
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('Error storing ujian: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan ujian.']);
-        }        
+        }
     }
 
     public function show(Ujian $ujian)
@@ -136,32 +140,36 @@ class UjianController extends Controller
     public function edit(Request $request, $id_ujian)
     {
         $ujian = Ujian::where('id_ujian', $id_ujian)->firstOrFail();
-    
+
         $id_kursus = $request->query('id_kursus');
-        
+
         $user = auth()->user();
-    
+
         $id_ujian = $request->query('id_ujian');
 
         $guru = Guru::where('id_user', auth()->user()->id)->first();
-    
+
         if (!$guru) {
             return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
         }
-    
+
         $courses = Kursus::where('id_guru', $guru->id_guru)->get();
-    
+        
+        $courses = kursus::with('guru')->get();
+
+        $course = $courses->where('id_kursus', $id_kursus)->first();
+
         if ($courses->isEmpty()) {
             return redirect()->back()->with('error', 'Kursus tidak ditemukan.');
         }
-    
-        return view('Role.Guru.Course.edit', compact('ujian', 'guru', 'id_kursus', 'courses', 'user','id_ujian'));
+
+        return view('Role.Guru.Course.edit', compact('ujian','course','courses', 'guru', 'id_kursus', 'courses', 'user', 'id_ujian'));
     }
 
     public function update(Request $request, $id_ujian)
     {
         Log::info('Mulai validasi input.');
-    
+
         $validated = $request->validate([
             'nama_ujian' => 'nullable|string|max:255',
             'id_tipe_ujian' => 'nullable|in:1,2,3',
@@ -172,58 +180,58 @@ class UjianController extends Controller
             'waktu_selesai' => 'nullable|date|after:waktu_mulai',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
+
         Log::info('Validasi input berhasil.');
-    
+
         try {
             Log::info('Mencari ujian dengan id_ujian: ' . $id_ujian);
             $ujian = Ujian::findOrFail($id_ujian);
-    
+
             Log::info('Memperbarui ujian dengan id_ujian: ' . $ujian->id_ujian);
             $ujian->nama_ujian = $validated['nama_ujian'] ?? $ujian->nama_ujian;
             $ujian->id_tipe_ujian = $validated['id_tipe_ujian'] ?? $ujian->id_tipe_ujian;
             $ujian->acak = $validated['acak'] ?? $ujian->acak;
             $ujian->status_jawaban = $validated['status_jawaban'] ?? $ujian->status_jawaban;
             $ujian->grade = $validated['grade'] ?? $ujian->grade;
-    
+
             if (isset($validated['waktu_mulai'])) {
                 $ujian->waktu_mulai = $validated['waktu_mulai'];
             }
-    
+
             if (isset($validated['waktu_selesai'])) {
                 $ujian->waktu_selesai = $validated['waktu_selesai'];
             }
-    
+
             if ($request->hasFile('image')) {
                 Log::info('File image ditemukan untuk ujian dengan id_ujian: ' . $ujian->id_ujian);
-                
+
                 if ($ujian->image) {
                     Storage::disk('public')->delete($ujian->image);
                     Log::info('Gambar lama berhasil dihapus.');
                 }
-    
+
                 $ujian->image = $request->file('image')->store('images/ujians', 'public');
                 Log::info('Gambar baru berhasil disimpan di: ' . $ujian->image);
             }
-    
+
             $ujian->save();
             Log::info('Ujian berhasil diperbarui dengan id_ujian: ' . $ujian->id_ujian);
-    
+
             $id_kursus = $request->input('id_kursus');
-    
+
             if (!$id_kursus) {
                 Log::error('id_kursus tidak ditemukan di request.');
                 return redirect()->back()->withErrors(['error' => 'ID Kursus tidak ditemukan.']);
             }
-    
+
             return redirect()->route('Guru.Ujian.index', ['id_kursus' => $id_kursus])->with('success', 'Ujian berhasil diperbarui.');
         } catch (\Exception $e) {
             Log::error('Error updating Ujian with ID: ' . $id_ujian . '. Error: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui ujian.']);
         }
     }
-    
-    
+
+
     public function destroy(String $id_ujian)
     {
         try {
