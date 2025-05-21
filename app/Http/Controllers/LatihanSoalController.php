@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Latihan;
+use App\Models\latihan;
 use App\Models\kurikulum;
 use App\Models\mata_pelajaran;
-use App\Models\Soal;
-use App\Models\Guru;
+use App\Models\soal;
+use App\Models\guru;
 use App\Models\kelas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -17,12 +17,12 @@ class LatihanSoalController extends Controller
 {
     public function index(Request $request)
     {
-        $latihan = Latihan::orderBy('id_latihan', 'DESC')->get();
+        $latihan = latihan::orderBy('id_latihan', 'DESC')->get();
         $id_latihan = $request->query('id_latihan');
         $kurikulums = kurikulum::all();
         $mapel = mata_pelajaran::all();
         $mataPelajarans = mata_pelajaran::with(['operator', 'kurikulum'])->get();
-        $kelas = Kelas::all();
+        $kelas = kelas::all();
         $user = auth()->user();
 
         return view('Role.Guru.Latihan.index', compact('latihan', 'mataPelajarans', 'user', 'kurikulums', 'mapel', 'kelas', 'id_latihan'));
@@ -33,8 +33,8 @@ class LatihanSoalController extends Controller
         $id_kurikulum = $request->input('id_kurikulum');
 
         // Get all kurikulum and classes
-        $kurikulums = Kurikulum::all();
-        $kelas = Kelas::all();
+        $kurikulums = kurikulum::all();
+        $kelas = kelas::all();
         $user = auth()->user();
 
         // If a kurikulum is selected, get the first mata pelajaran that matches
@@ -80,7 +80,7 @@ class LatihanSoalController extends Controller
         Log::info('Validated data:', $validated);
 
         $idUser   = auth()->user()->id;
-        $guru = Guru::where('id_user', $idUser)->first();
+        $guru = guru::where('id_user', $idUser)->first();
 
         if (!$guru) {
             throw new \Exception('Guru tidak ditemukan untuk pengguna yang sedang login.');
@@ -104,7 +104,7 @@ class LatihanSoalController extends Controller
         return redirect()->route('Guru.Latihan.index')->with('success', 'Latihan berhasil dibuat.');
     }
 
-    public function show(Latihan $latihanSoal)
+    public function show(latihan $latihanSoal)
     {
         return view('Role.Guru.Latihan.index', compact('mataPelajarans', 'mapel', 'kurikulums', 'kelas', 'user'));
     }
@@ -112,11 +112,11 @@ class LatihanSoalController extends Controller
     public function edit(Request $request, $id_latihan)
     {
         $id_kurikulum = $request->input('id_kurikulum');
-        $kurikulums = Kurikulum::all();
-        $kelas = Kelas::all();
+        $kurikulums = kurikulum::all();
+        $kelas = kelas::all();
         $user = auth()->user();
 
-        $latihan = Latihan::where('id_latihan', $id_latihan)->firstOrFail();
+        $latihan = latihan::where('id_latihan', $id_latihan)->firstOrFail();
 
         if ($id_kurikulum) {
             $mapel = mata_pelajaran::where('id_kurikulum', $id_kurikulum)->first();
@@ -142,13 +142,13 @@ class LatihanSoalController extends Controller
             'grade' => 'required|integer|min:100|max:100',
         ]);
 
-        $latihan = Latihan::findOrFail($id_latihan);
+        $latihan = latihan::findOrFail($id_latihan);
         $latihan->update($validated);
 
         return redirect()->route('Guru.Latihan.index')->with('success', 'Latihan berhasil diperbarui.');
     }
 
-    public function destroy(Latihan $latihanSoal)
+    public function destroy(latihan $latihanSoal)
     {
         if ($latihanSoal->Image) {
             Storage::disk('public')->delete($latihanSoal->Image);

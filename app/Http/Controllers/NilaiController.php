@@ -2,12 +2,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Nilai;
-use App\Models\Kursus;
-use App\Models\Siswa;
+use App\Models\kursus;
+use App\Models\siswa;
 use App\Models\TipeNilai;
 use App\Models\NilaiKursus;
-use App\Models\Persentase;
-use App\Models\Tipe_Ujian;
+use App\Models\persentase;
+use App\Models\tipe_ujian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -31,7 +31,7 @@ class NilaiController extends Controller
     public function calculateAllNilai($id_kursus)
     {
         // Cek apakah persentase sudah diatur
-        $persentaseCheck = Persentase::where('id_kursus', $id_kursus)->get();
+        $persentaseCheck = persentase::where('id_kursus', $id_kursus)->get();
         if ($persentaseCheck->isEmpty()) {
             return response()->json([
                 'success' => false,
@@ -44,7 +44,7 @@ class NilaiController extends Controller
         
         try {
             // Ambil semua siswa dalam kursus
-            $siswaList = Siswa::whereHas('kursus', function($query) use ($id_kursus) {
+            $siswaList = siswa::whereHas('kursus', function($query) use ($id_kursus) {
                 $query->where('id_kursus', $id_kursus);
             })->get();
             
@@ -147,7 +147,7 @@ class NilaiController extends Controller
         // Hitung nilai total berdasarkan persentase
         foreach ($nilaiKursusList as $nilaiKursus) {
             // Ambil persentase untuk tipe ujian ini
-            $persentase = Persentase::where('id_kursus', $id_kursus)
+            $persentase = persentase::where('id_kursus', $id_kursus)
                 ->where('id_tipe_ujian', $nilaiKursus->id_tipe_ujian)
                 ->first();
             

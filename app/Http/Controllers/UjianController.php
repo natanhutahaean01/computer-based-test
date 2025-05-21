@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ujian;
-use App\Models\Kursus;
-use App\Models\Guru;
-use App\Models\Tipe_Ujian;
+use App\Models\ujian;
+use App\Models\kursus;
+use App\Models\guru;
+use App\Models\tipe_ujian;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -24,7 +24,7 @@ class UjianController extends Controller
             return redirect()->route('login'); // Redirect jika user tidak ditemukan
         }
 
-        $guru = Guru::where('id_user', $user->id)->first();
+        $guru = guru::where('id_user', $user->id)->first();
 
         if (!$guru) {
             return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
@@ -40,7 +40,7 @@ class UjianController extends Controller
             return redirect()->back()->withErrors(['error' => 'Kursus yang dipilih tidak valid.']);
         }
 
-        $kursus = Kursus::where('id_kursus', $id_kursus)
+        $kursus = kursus::where('id_kursus', $id_kursus)
             ->where('id_guru', $guru->id_guru)
             ->first();
 
@@ -48,7 +48,7 @@ class UjianController extends Controller
             return redirect()->back()->withErrors(['error' => 'Kursus yang dipilih tidak valid.']);
         }
 
-        $ujians = Ujian::where('id_kursus', $kursus->id_kursus)
+        $ujians = ujian::where('id_kursus', $kursus->id_kursus)
             ->orderBy('tanggal_ujian', 'DESC')
             ->get();
 
@@ -57,7 +57,7 @@ class UjianController extends Controller
 
     public function create(Request $request)
     {
-        $guru = Guru::where('id_user', auth()->user()->id)->first();
+        $guru = guru::where('id_user', auth()->user()->id)->first();
 
         if (!$guru) {
             return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
@@ -65,13 +65,13 @@ class UjianController extends Controller
 
         $id_kursus = $request->query('id_kursus');
 
-        $kursus = Kursus::where('id_guru', $guru->id_guru)->get();
+        $kursus = kursus::where('id_guru', $guru->id_guru)->get();
 
         $courses = kursus::with('guru')->get();
 
         $course = $courses->where('id_kursus', $id_kursus)->first();
 
-        $tipeUjians = Tipe_Ujian::all();
+        $tipeUjians = tipe_ujian::all();
         $user = auth()->user();
 
         return view('Role.Guru.Course.create', compact('kursus', 'courses', 'course', 'tipeUjians', 'user', 'id_kursus'));
@@ -97,7 +97,7 @@ class UjianController extends Controller
         try {
             Log::info('Validated data:', $validated);
 
-            $guru = Guru::where('id_user', auth()->user()->id)->first();
+            $guru = guru::where('id_user', auth()->user()->id)->first();
 
             if (!$guru) {
                 return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
@@ -107,7 +107,7 @@ class UjianController extends Controller
             $waktuSelesai = Carbon::parse($validated['waktu_selesai']);
             $durasi = $waktuMulai->diffInMinutes($waktuSelesai);
 
-            $ujian = Ujian::create([
+            $ujian = ujian::create([
                 'id_guru' => $guru->id_guru,
                 'nama_ujian' => $validated['nama_ujian'],
                 'password_masuk' => Hash::make($validated['password_masuk']),  // Hash password masuk
@@ -131,7 +131,7 @@ class UjianController extends Controller
         }
     }
 
-    public function show(Ujian $ujian)
+    public function show(ujian $ujian)
     {
         $course = $ujian->kursus;
         return view('Role.Guru.Course.index', compact('ujian', 'course'));
@@ -139,7 +139,7 @@ class UjianController extends Controller
 
     public function edit(Request $request, $id_ujian)
     {
-        $ujian = Ujian::where('id_ujian', $id_ujian)->firstOrFail();
+        $ujian = ujian::where('id_ujian', $id_ujian)->firstOrFail();
 
         $id_kursus = $request->query('id_kursus');
 
@@ -147,13 +147,13 @@ class UjianController extends Controller
 
         $id_ujian = $request->query('id_ujian');
 
-        $guru = Guru::where('id_user', auth()->user()->id)->first();
+        $guru = guru::where('id_user', auth()->user()->id)->first();
 
         if (!$guru) {
             return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
         }
 
-        $courses = Kursus::where('id_guru', $guru->id_guru)->get();
+        $courses = kursus::where('id_guru', $guru->id_guru)->get();
         
         $courses = kursus::with('guru')->get();
 
@@ -235,7 +235,7 @@ class UjianController extends Controller
     public function destroy(String $id_ujian)
     {
         try {
-            $ujian = Ujian::findOrFail($id_ujian);
+            $ujian = ujian::findOrFail($id_ujian);
 
             if ($ujian->Image) {
                 Storage::disk('public')->delete($ujian->Image);
@@ -252,9 +252,9 @@ class UjianController extends Controller
     public function prosesNilai($id_ujian)
     {
         try {
-            $ujian = Ujian::findOrFail($id_ujian);
+            $ujian = ujian::findOrFail($id_ujian);
             $kursus = $ujian->kursus;  // Dapatkan kursus dari ujian yang sedang berlangsung
-            $siswa = Siswa::all();  // Ambil semua siswa yang mengikuti ujian
+            $siswa = siswa::all();  // Ambil semua siswa yang mengikuti ujian
 
             $persentase = Persentase::where('id_kursus', $kursus->id_kursus)->first();
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Guru;
+use App\Models\guru;
 use App\Models\User;
 use App\Models\Operator;
 use App\Models\mata_pelajaran;
@@ -15,7 +15,7 @@ class GuruController extends Controller
 {
     public function index()
     {
-        $gurus = Guru::with('user')->get();
+        $gurus = guru::with('user')->get();
         $user = auth()->user();
 
         if (!$user) {
@@ -129,14 +129,14 @@ class GuruController extends Controller
 
     public function show(string $id)
     {
-        $guru = Guru::with('user')->findOrFail($id);
+        $guru = guru::with('user')->findOrFail($id);
         return view('Role.Operator.Guru.index', compact('guru'));
     }
 
     public function edit(string $id)
     {
         $mataPelajaran = mata_pelajaran::all();
-        $guru = Guru::with('user')->findOrFail($id);
+        $guru = guru::with('user')->findOrFail($id);
         $user = auth()->user();
         return view('Role.Operator.Guru.edit', compact('guru', 'user', 'mataPelajaran'));
     }
@@ -166,7 +166,7 @@ class GuruController extends Controller
         ]);
 
         // Temukan guru berdasarkan ID
-        $guru = Guru::findOrFail($id_guru);
+        $guru = guru::findOrFail($id_guru);
 
         // Update data guru
         $guru->nama_guru = $request->name;
@@ -207,7 +207,7 @@ class GuruController extends Controller
 
     public function destroy(string $id)
     {
-        $guru = Guru::findOrFail($id);
+        $guru = guru::findOrFail($id);
 
         if ($guru->status === 'Aktif') {
             return redirect()->route('Operator.Guru.index')->with('error', 'Guru dengan status "Aktif" tidak dapat dihapus.');

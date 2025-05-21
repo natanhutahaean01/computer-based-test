@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Siswa;
+use App\Models\siswa;
 use App\Models\User;
 use App\Models\Operator;
-use App\Models\Kelas;
+use App\Models\kelas;
 use App\Imports\SiswaImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,8 +15,8 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        $siswa = Siswa::with('user')->get();
-        $kelas = Kelas::all();
+        $siswa = siswa::with('user')->get();
+        $kelas = kelas::all();
         $user = auth()->user();
         if (!$user) {
             return redirect()->route('login');
@@ -61,7 +61,7 @@ class SiswaController extends Controller
 
     public function create()
     {
-        $kelas = Kelas::all();
+        $kelas = kelas::all();
         $user = auth()->user();
         if (!$user) {
             return redirect()->route('login');
@@ -120,7 +120,7 @@ class SiswaController extends Controller
                 return redirect()->back()->with('error', 'Operator tidak ditemukan.');
             }
 
-            $siswa = Siswa::create([
+            $siswa = siswa::create([
                 'nama_siswa' => $request->name,
                 'nis' => $request->nis,
                 'id_user' => $user->id,
@@ -143,14 +143,14 @@ class SiswaController extends Controller
 
     public function show(string $id)
     {
-        $siswa = Siswa::with('user')->findOrFail($id);
+        $siswa = siswa::with('user')->findOrFail($id);
         return view('Role.Operator.Siswa.index', compact('siswa'));
     }
 
     public function edit(string $id)
     {
-        $siswa = Siswa::with('user')->findOrFail($id);
-        $kelas = Kelas::all();
+        $siswa = siswa::with('user')->findOrFail($id);
+        $kelas = kelas::all();
         $user = auth()->user();
         return view('Role.Operator.Siswa.edit', compact('user', 'siswa', 'kelas'));
     }
@@ -182,7 +182,7 @@ class SiswaController extends Controller
         ]);
 
         // Temukan siswa berdasarkan ID
-        $siswa = Siswa::findOrFail($id_siswa);
+        $siswa = siswa::findOrFail($id_siswa);
 
         // Update data siswa
         $siswa->nama_siswa = $request->name;
@@ -218,7 +218,7 @@ class SiswaController extends Controller
 
     public function destroy(string $id)
     {
-        $siswa = Siswa::findOrFail($id);
+        $siswa = siswa::findOrFail($id);
 
         // Cek apakah status siswa aktif
         if ($siswa->status === 'Aktif') {

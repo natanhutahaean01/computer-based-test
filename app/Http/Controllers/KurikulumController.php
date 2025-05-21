@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kurikulum;
+use App\Models\kurikulum;
 use App\Models\Operator;
 use Illuminate\Http\Request;
 
@@ -10,7 +10,7 @@ class KurikulumController extends Controller
 {
     public function index()
     {
-        $kurikulums = Kurikulum::with('operator')->get();
+        $kurikulums = kurikulum::with('operator')->get();
         $user = auth()->user();
         if (!$user) {
             return redirect()->route('login');
@@ -52,14 +52,14 @@ class KurikulumController extends Controller
 
     public function show(string $id)
     {
-        $kurikulum = Kurikulum::with('operator')->findOrFail($id);
+        $kurikulum = kurikulum::with('operator')->findOrFail($id);
         $operator = Operator::all();
         return view('Role.Operator.Kurikulum.index', compact('kurikulum','operator'));
     }
 
     public function edit(string $id)
     {
-        $kurikulum = Kurikulum::findOrFail($id);
+        $kurikulum = kurikulum::findOrFail($id);
         $user = auth()->user();
         if (!$user) {
             return redirect()->route('login');
@@ -78,7 +78,7 @@ class KurikulumController extends Controller
             'nama_kurikulum.unique' => 'Nama kurikulum sudah ada, silakan pilih nama lain.',
         ]);
 
-        $kurikulum = Kurikulum::findOrFail($id);
+        $kurikulum = kurikulum::findOrFail($id);
         $id_operator = auth()->user()->id_operator;
 
         $idUser = auth()->user()->id;
@@ -95,7 +95,7 @@ class KurikulumController extends Controller
 
     public function destroy(string $id)
     {
-        $kurikulum = Kurikulum::findOrFail($id);
+        $kurikulum = kurikulum::findOrFail($id);
         $kurikulum->delete();
 
         return redirect()->route('Operator.Kurikulum.index')->with('success', 'Kurikulum berhasil dihapus.');

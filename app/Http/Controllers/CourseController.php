@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\kursus;
-use App\Models\Guru;
+use App\Models\guru;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
@@ -41,7 +41,7 @@ class CourseController extends Controller
             ]);
 
             $idUser = auth()->user()->id;
-            $guru = Guru::where('id_user', $idUser)->first();
+            $guru = guru::where('id_user', $idUser)->first();
 
             if (!$guru) {
                 throw new \Exception('Guru tidak ditemukan untuk pengguna yang sedang login.');
@@ -56,7 +56,7 @@ class CourseController extends Controller
 
             $imageUrl = url('images/' . $imageName); // URL gambar yang bisa diakses dari domain
 
-            $course = Kursus::create([
+            $course = kursus::create([
                 'nama_kursus' => $validated['nama_kursus'],
                 'password' => Hash::make($validated['password']),
                 'id_guru' => $guru->id_guru,

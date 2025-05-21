@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kelas;
+use App\Models\kelas;
 use App\Models\Operator;
 use Illuminate\Http\Request;
 
@@ -10,7 +10,7 @@ class KelasController extends Controller
 {
     public function index()
     {
-        $kelas = Kelas::with('operator')->get();
+        $kelas = kelas::with('operator')->get();
         $user = auth()->user();
 
         if (!$user) {
@@ -46,7 +46,7 @@ class KelasController extends Controller
         $operator = Operator::where('id_user', $idUser)->first();
 
         // Create the class (Kelas)
-        Kelas::create([
+        kelas::create([
             'nama_kelas' => $request->nama_kelas,
             'id_operator' => $operator->id_operator,
         ]);
@@ -56,13 +56,13 @@ class KelasController extends Controller
 
     public function show(string $id)
     {
-        $kelas = Kelas::with('operator')->findOrFail($id);
+        $kelas = kelas::with('operator')->findOrFail($id);
         return view('Role.Operator.Kelas.show', compact('kelas'));
     }
 
     public function edit(string $id)
     {
-        $kelas = Kelas::findOrFail($id);
+        $kelas = kelas::findOrFail($id);
         $user = auth()->user();
         return view('Role.Operator.Kelas.edit', compact('kelas', 'user'));
     }
@@ -79,7 +79,7 @@ class KelasController extends Controller
             'nama_kelas.unique' => 'Nama kelas sudah ada, silakan pilih nama lain.',
         ]);
 
-        $kelas = Kelas::findOrFail($id);
+        $kelas = kelas::findOrFail($id);
         $kelas->update([
             'nama_kelas' => $request->nama_kelas,
         ]);
@@ -89,7 +89,7 @@ class KelasController extends Controller
 
     public function destroy(string $id)
     {
-        $kelas = Kelas::findOrFail($id);
+        $kelas = kelas::findOrFail($id);
         $kelas->delete();
 
         return redirect()->route('Operator.Kelas.index')->with('success', 'Kelas berhasil dihapus.');

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\mata_pelajaran;
-use App\Models\Kurikulum;
+use App\Models\kurikulum;
 use App\Models\Operator;
 use Illuminate\Http\Request;
 
@@ -12,14 +12,14 @@ class MataPelajaranController extends Controller
     public function index()
     {
         $mataPelajarans = mata_pelajaran::with(['operator', 'kurikulum'])->get();
-        $kurikulums = Kurikulum::all();
+        $kurikulums = kurikulum::all();
         $user = auth()->user();
         return view('Role.Operator.Mapel.index', compact('mataPelajarans', 'user', 'kurikulums'));
     }
 
     public function create()
     {
-        $kurikulums = Kurikulum::all();
+        $kurikulums = kurikulum::all();
         $user = auth()->user();
         return view('Role.Operator.Mapel.create', compact('user', 'kurikulums'));
     }
@@ -59,7 +59,7 @@ class MataPelajaranController extends Controller
     public function edit(string $id)
     {
         $mataPelajaran = mata_pelajaran::findOrFail($id);
-        $kurikulums = Kurikulum::all();
+        $kurikulums = kurikulum::all();
         $user = auth()->user();
         return view('Role.Operator.Mapel.edit', compact('mataPelajaran', 'kurikulums', 'user'));
     }

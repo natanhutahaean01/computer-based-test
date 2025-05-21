@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Materi;
-use App\Models\Kursus;
-use App\Models\Guru;
+use App\Models\kursus;
+use App\Models\guru;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -31,7 +31,7 @@ class MateriController extends Controller
 
         $course = $courses->where('id_kursus', $id_kursus)->first();
 
-        $kursus = Kursus::where('id_kursus', $id_kursus)
+        $kursus = kursus::where('id_kursus', $id_kursus)
             ->where('id_guru', $guru->id_guru)
             ->first();
 
@@ -51,7 +51,7 @@ class MateriController extends Controller
 
     public function create(Request $request)
     {
-        $guru = Guru::where('id_user', auth()->user()->id)->first();
+        $guru = guru::where('id_user', auth()->user()->id)->first();
 
         if (!$guru) {
             return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
@@ -59,7 +59,7 @@ class MateriController extends Controller
 
         $id_kursus = $request->query('id_kursus');
 
-        $kursus = Kursus::where('id_guru', $guru->id_guru)->get();
+        $kursus = kursus::where('id_guru', $guru->id_guru)->get();
 
         if ($kursus->isEmpty()) {
             return redirect()->back()->with('error', 'Kursus tidak ditemukan.');
@@ -145,13 +145,13 @@ $request->validate([
 
         $id_materi = $request->query('id_materi');
 
-        $guru = Guru::where('id_user', auth()->user()->id)->first();
+        $guru = guru::where('id_user', auth()->user()->id)->first();
 
         if (!$guru) {
             return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
         }
 
-        $courses = Kursus::where('id_guru', $guru->id_guru)->get();
+        $courses = kursus::where('id_guru', $guru->id_guru)->get();
 
         $courses = kursus::with('guru')->get();
 

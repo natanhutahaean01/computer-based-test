@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Soal;
+use App\Models\soal;
 use App\Models\User;
-use App\Models\Kursus;
-use App\Models\Ujian;
-use App\Models\Guru;
+use App\Models\kursus;
+use App\Models\ujian;
+use App\Models\guru;
 use App\Models\latihan;
 use App\Models\tipe_ujian;
-use App\Models\JawabanSoal;
+use App\Models\jawaban_soal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -25,12 +25,12 @@ class SoalController extends Controller
         $soals = null;
 
         if ($idUjian) {
-            $soals = Soal::where('id_ujian', $idUjian)
+            $soals = soal::where('id_ujian', $idUjian)
                 ->with(['ujian', 'latihan', 'tipe_soal'])
                 ->orderBy('id_soal', 'DESC')
                 ->get();
         } elseif ($idLatihan) {
-            $soals = Soal::where('id_latihan', $idLatihan)
+            $soals = soal::where('id_latihan', $idLatihan)
                 ->with(['latihan', 'tipe_soal'])
                 ->orderBy('id_soal', 'DESC')
                 ->get();
@@ -39,7 +39,7 @@ class SoalController extends Controller
         // Ambil data user yang sedang login
         $user = auth()->user();
 
-        $guru = Guru::where('id_user', $user->id)->first();
+        $guru = guru::where('id_user', $user->id)->first();
 
         if (!$guru) {
             return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
@@ -100,7 +100,7 @@ class SoalController extends Controller
             return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
         }
 
-        $guru = Guru::where('id_user', auth()->user()->id)->first();
+        $guru = guru::where('id_user', auth()->user()->id)->first();
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             // Ensure the images folder exists
@@ -121,9 +121,9 @@ class SoalController extends Controller
         $kursus = $guru->kursus()->first();
 
         if ($idLatihan) {
-            $latihan = Latihan::findOrFail($idLatihan);
+            $latihan = latihan::findOrFail($idLatihan);
 
-            $soal = Soal::create([
+            $soal = soal::create([
                 'soal' => $validated['soal'],
                 'image' => $imageName,
                 'id_tipe_soal' => $validated['id_tipe_soal'],
@@ -131,19 +131,19 @@ class SoalController extends Controller
                 'image_url' => $imageUrl,
             ]);
 
-            $jumlahSoalLatihan = Soal::where('id_latihan', $idLatihan)->count();
+            $jumlahSoalLatihan = soal::where('id_latihan', $idLatihan)->count();
 
             $nilaiPerSoalLatihan = $jumlahSoalLatihan > 0 ? round(100 / $jumlahSoalLatihan, 2) : 0;
 
             $soal->update(['nilai_per_soal' => $nilaiPerSoalLatihan]);
-            Soal::where('id_latihan', $idLatihan)->update(['nilai_per_soal' => $nilaiPerSoalLatihan]);
+            soal::where('id_latihan', $idLatihan)->update(['nilai_per_soal' => $nilaiPerSoalLatihan]);
 
             Log::info('Soal latihan berhasil dibuat.', ['soal_id' => $soal->id_soal]);
         } else {
             $ujian = $kursus->ujian()->first();
             $idUjian = $ujian ? $ujian->id_ujian : null;
 
-            $soal = Soal::create([
+            $soal = soal::create([
                 'soal' => $validated['soal'],
                 'image' => $imageName,
                 'image_url' => $imageUrl,
@@ -152,12 +152,12 @@ class SoalController extends Controller
                 'id_latihan' => null, // Soal for ujian is not related to latihan
             ]);
 
-            $jumlahSoal = Soal::where('id_ujian', $idUjian)->count();
+            $jumlahSoal = soal::where('id_ujian', $idUjian)->count();
 
             $nilaiPerSoal = $jumlahSoal > 0 ? round(100 / $jumlahSoal, 2) : 0;
 
             $soal->update(['nilai_per_soal' => $nilaiPerSoal]);
-            Soal::where('id_ujian', $idUjian)->update(['nilai_per_soal' => $nilaiPerSoal]);
+            soal::where('id_ujian', $idUjian)->update(['nilai_per_soal' => $nilaiPerSoal]);
 
             Log::info('Soal ujian berhasil dibuat.', ['soal_id' => $soal->id_soal]);
         }
@@ -199,7 +199,7 @@ class SoalController extends Controller
     public function edit(Request $request, $id_soal)
     {
 
-        $soal = Soal::findOrFail($id_soal);
+        $soal = soal::findOrFail($id_soal);
 
         $user = auth()->user();
 
@@ -225,7 +225,7 @@ class SoalController extends Controller
 
     public function preview(Request $request, $id_soal)
     {
-        $soal = Soal::findOrFail($id_soal);
+        $soal = soal::findOrFail($id_soal);
 
         $user = auth()->user();
 
@@ -258,7 +258,7 @@ class SoalController extends Controller
             'correct_answer' => 'required|string',
         ]);
 
-        $soal = Soal::findOrFail($id_soal);
+        $soal = soal::findOrFail($id_soal);
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $imagePath = public_path('images');
@@ -318,17 +318,17 @@ class SoalController extends Controller
         Log::info('Jawaban berhasil disimpan untuk soal.', ['soal_id' => $soal->id_soal]);
 
         if ($soal->id_latihan) {
-            $jumlahSoalLatihan = Soal::where('id_latihan', $soal->id_latihan)->count();
+            $jumlahSoalLatihan = soal::where('id_latihan', $soal->id_latihan)->count();
             $nilaiPerSoalLatihan = $jumlahSoalLatihan > 0 ? 100 / $jumlahSoalLatihan : 0;
             $soal->update(['nilai_per_soal' => $nilaiPerSoalLatihan]);
 
-            Soal::where('id_latihan', $soal->id_latihan)->update(['nilai_per_soal' => $nilaiPerSoalLatihan]);
+            soal::where('id_latihan', $soal->id_latihan)->update(['nilai_per_soal' => $nilaiPerSoalLatihan]);
         } elseif ($soal->id_ujian) {
             $jumlahSoal = Soal::where('id_ujian', $soal->id_ujian)->count();
             $nilaiPerSoal = $jumlahSoal > 0 ? $soal->ujian->grade / $jumlahSoal : 0;
             $soal->update(['nilai_per_soal' => $nilaiPerSoal]);
 
-            Soal::where('id_ujian', $soal->id_ujian)->update(['nilai_per_soal' => $nilaiPerSoal]);
+            soal::where('id_ujian', $soal->id_ujian)->update(['nilai_per_soal' => $nilaiPerSoal]);
         }
 
         return redirect()->route('Guru.Soal.index', ['id_ujian' => $soal->id_ujian ?? null, 'id_latihan' => $soal->id_latihan ?? null])->with('success', 'Soal berhasil diperbarui.');
@@ -338,7 +338,7 @@ class SoalController extends Controller
     {
         try {
             // Cari soal berdasarkan id_soal
-            $soal = Soal::findOrFail($id_soal); // Menemukan soal berdasarkan id_soal
+            $soal = soal::findOrFail($id_soal); // Menemukan soal berdasarkan id_soal
 
             // Simpan id_ujian atau id_latihan untuk redirect
             $idUjian = $soal->id_ujian;
@@ -380,10 +380,10 @@ class SoalController extends Controller
 
     protected function updateNilaiPerSoalUjian($idUjian)
     {
-        $jumlahSoal = Soal::where('id_ujian', $idUjian)->count();
-        $ujian = Ujian::find($idUjian);
+        $jumlahSoal = soal::where('id_ujian', $idUjian)->count();
+        $ujian = ujian::find($idUjian);
         $nilaiPerSoal = $jumlahSoal > 0 ? $ujian->grade / $jumlahSoal : 0;
-        Soal::where('id_ujian', $idUjian)->update(['nilai_per_soal' => $nilaiPerSoal]);
+        soal::where('id_ujian', $idUjian)->update(['nilai_per_soal' => $nilaiPerSoal]);
 
         return $nilaiPerSoal;
     }
@@ -391,9 +391,9 @@ class SoalController extends Controller
     // Fungsi untuk update nilai per soal latihan
     protected function updateNilaiPerSoalLatihan($idLatihan)
     {
-        $jumlahSoal = Soal::where('id_latihan', $idLatihan)->count();
+        $jumlahSoal = soal::where('id_latihan', $idLatihan)->count();
         $nilaiPerSoalLatihan = $jumlahSoal > 0 ? 100 / $jumlahSoal : 0;
-        Soal::where('id_latihan', $idLatihan)->update(['nilai_per_soal' => $nilaiPerSoalLatihan]);
+        soal::where('id_latihan', $idLatihan)->update(['nilai_per_soal' => $nilaiPerSoalLatihan]);
 
         return $nilaiPerSoalLatihan;
     }
