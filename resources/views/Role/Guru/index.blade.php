@@ -326,7 +326,7 @@
                     <div class="mb-4">
                         @foreach ($courses as $course)
                             <div
-                                class="bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center">
+                                class="bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
                                 <div class="flex items-center mb-4 sm:mb-0">
                                     <img alt="Thumbnail image of the {{ $course->nama_kursus }} course"
                                         class="w-24 h-24 rounded-lg mr-4 object-cover" height="100"
@@ -368,39 +368,32 @@
                 </div>
             </div>
         </div>
-      <!-- Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Berhasil Menambahkan Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="successModal"
+            tabindex="-1">
+            <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-teal-700">
+                        Berhasil Menambahkan Data
+                    </h3>
+                    <button aria-label="Close modal" class="text-gray-600 hover:text-gray-900 text-2xl font-bold"
+                        id="closeModalBtn">
+                        ×
+                    </button>
                 </div>
-                <div class="modal-body">
+                <div class="text-gray-800 text-base">
                     @if (session('success'))
                         {{ session('success') }}
                     @endif
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <div class="mt-6 flex justify-end">
+                    <button
+                        class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-5 rounded-md transition-colors duration-300"
+                        id="closeModalBtnFooter">
+                        Tutup
+                    </button>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- JavaScript to show modal if success message exists and auto-close after 3 seconds -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Menampilkan modal otomatis jika session success ada
-        @if (session('success'))
-            var myModal = new bootstrap.Modal(document.getElementById('successModal'));
-            myModal.show();
-
-            // Menutup modal setelah 3 detik
-            setTimeout(function() {
-                myModal.hide();
-            }, 3000); // 3000ms = 3 detik
-        @endif
+            <script>
                 // Dropdown toggle script
                 const dropdownButton = document.getElementById('dropdownButton');
                 const dropdownMenu = document.getElementById('dropdownMenu');

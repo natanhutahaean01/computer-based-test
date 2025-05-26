@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Imports;
 
 use App\Models\Guru;
@@ -16,7 +17,7 @@ class GuruImport implements ToModel, WithStartRow, WithValidation
 {
     public function startRow(): int
     {
-        return 2;
+        return 2;  // Mulai dari baris kedua pada file Excel
     }
 
     public function model(array $row)
@@ -24,29 +25,29 @@ class GuruImport implements ToModel, WithStartRow, WithValidation
         if (Guru::where('nip', $row[1])->exists()) {
             throw new \Exception("NIP {$row[1]} sudah ada di tabel guru.");
         }
-    
+
         $guruRole = Role::where('name', 'guru')->first();
-    
+
         if (!$guruRole) {
             throw new \Exception('Role "guru" tidak ditemukan.');
         }
-    
+
         $user = User::create([
             'name' => $row[0],
             'email' => $row[2],
             'password' => Hash::make($row[3]),
         ]);
-    
+
         $user->assignRole('Guru');
-    
+
         $operator = Operator::where('id_user', auth()->user()->id)->first();
-    
+
         $mataPelajaran = mata_pelajaran::where('nama_mata_pelajaran', $row[4])->first();
-    
+
         if (!$mataPelajaran) {
             throw new \Exception("Mata pelajaran {$row[4]} tidak ditemukan.");
         }
-    
+
         Guru::create([
             'nama_guru' => $row[0],
             'nip' => $row[1],
@@ -55,10 +56,10 @@ class GuruImport implements ToModel, WithStartRow, WithValidation
             'status' => 'Aktif',
             'id_mata_pelajaran' => $mataPelajaran->id_mata_pelajaran,
         ]);
-    
+
         return null;
     }
-    
+
     public function rules(): array
     {
         return [

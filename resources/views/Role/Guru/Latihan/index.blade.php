@@ -1,17 +1,17 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guru | Course</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Guru | Latihan</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
     <style>
-        /* General Styles */
         body {
             background-color: #f4f5f7;
             font-family: 'Arial', sans-serif;
@@ -20,11 +20,10 @@
             color: #333;
         }
 
-        /* Header Styles */
         .header {
             background: linear-gradient(to right, #00bfae, #00796b);
             color: white;
-            padding: 20px 30px;
+            padding: 0 1.5rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
@@ -32,28 +31,31 @@
             position: fixed;
             top: 0;
             width: 100%;
+            height: 64px;
             z-index: 1000;
         }
 
         .header .logo img {
             max-width: 120px;
             border-radius: 8px;
+            height: 40px;
+            object-fit: contain;
         }
 
         .header .user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             position: relative;
+            cursor: pointer;
         }
 
         .header .user-info img {
-            width: 45px;
-            height: 45px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #ffffff;
-            cursor: pointer;
             transition: transform 0.3s ease;
         }
 
@@ -62,22 +64,23 @@
         }
 
         .header .user-info span {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            line-height: 1.2;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            white-space: nowrap;
         }
 
-        /* Dropdown Menu Styles */
         .dropdown-menu {
             display: none;
             position: absolute;
-            top: 60px;
+            top: 56px;
             right: 0;
             background-color: #ffffff;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
             padding: 10px;
             border-radius: 8px;
-            width: 150px;
+            width: 160px;
             z-index: 1500;
         }
 
@@ -89,10 +92,13 @@
             background-color: #ff4d4d;
             color: white;
             border: none;
-            padding: 10px;
+            padding: 10px 0;
             width: 100%;
             border-radius: 6px;
+            font-weight: 600;
+            font-size: 15px;
             text-align: center;
+            transition: background-color 0.3s ease;
         }
 
         .logout-btn:hover {
@@ -101,15 +107,16 @@
 
         .sidebar {
             background: linear-gradient(to bottom, #00796b, #00bfae, #00796b);
-            width: 260px;
-            padding: 25px 15px;
+            width: 300px;
+            /* Lebar sidebar diperbesar */
+            padding: 2rem 1rem;
             position: fixed;
-            top: 80px;
+            top: 64px;
             left: 0;
             bottom: 0;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 1.25rem;
             transition: all 0.3s ease;
             z-index: 900;
         }
@@ -124,11 +131,13 @@
             font-weight: 600;
             font-size: 17px;
             transition: all 0.3s ease;
+            gap: 12px;
         }
 
         .sidebar a i {
-            margin-right: 15px;
             font-size: 22px;
+            min-width: 24px;
+            text-align: center;
         }
 
         .sidebar a.active {
@@ -143,14 +152,12 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* Adjust the "Course" button to match other sidebar items */
         #dropdownButton {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
             padding: 12px 18px;
-            /* Same as other sidebar items */
             color: white;
             text-decoration: none;
             border-radius: 12px;
@@ -161,37 +168,41 @@
 
         #dropdownButton i {
             font-size: 22px;
-            /* Same icon size as other items */
         }
 
         #dropdownButton span {
             font-size: 17px;
-            /* Same font size as other items */
         }
 
-
-        /* Button Styles */
+        /* Button fixed di sebelah kanan */
         .btn-add-top-right {
-            position: absolute;
-            top: 100px;
+            position: fixed;
+            top: 80px;
             right: 30px;
-            background-color: #00bfae;
+            background-color: #28a745;
+            /* Hijau */
             color: white;
             padding: 12px 25px;
             border-radius: 25px;
             font-size: 16px;
             border: none;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
             min-width: 150px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            z-index: 1001;
         }
 
+        /* Hover effect untuk button */
         .btn-add-top-right:hover {
-            background-color: #00796b;
+            background-color: #218838;
+            /* Hijau lebih gelap */
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
 
-        /* Table Styles */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -210,7 +221,7 @@
         }
 
         table th {
-            background-color: #14A098;
+            background-color: #14a098;
             color: white;
             font-weight: 700;
             text-transform: uppercase;
@@ -226,16 +237,16 @@
             vertical-align: middle;
         }
 
-        /* Main Content */
         .main-content {
-            margin-left: 280px;
+            margin-left: 300px;
             padding: 100px 30px 30px;
             flex: 1;
             transition: all 0.3s ease-in-out;
             overflow-y: auto;
+            min-height: 100vh;
+            background-color: #e5e7eb;
         }
 
-        /* Main Content Box */
         .main-content-box {
             padding: 30px;
             background-color: white;
@@ -244,25 +255,49 @@
             margin-bottom: 30px;
         }
 
-        /* Mobile Responsiveness */
+        /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
-                padding: 20px;
-                top: 0;
+                padding: 1.25rem 1rem;
+                top: 64px;
                 left: 0;
                 height: auto;
                 border-radius: 0;
+                flex-direction: row;
+                justify-content: space-around;
+                gap: 0;
+                position: fixed;
+                z-index: 1000;
+            }
+
+            .sidebar a {
+                padding: 10px 12px;
+                font-size: 14px;
+                border-radius: 8px;
+                gap: 6px;
+            }
+
+            .sidebar a i {
+                font-size: 18px;
+                min-width: auto;
             }
 
             .main-content {
                 margin-left: 0;
-                padding: 70px 20px 20px;
+                padding: 130px 20px 20px;
             }
 
             .btn-add-top-right {
-                width: 100%;
-                padding: 15px 0;
+                position: fixed;
+                top: 130px;
+                right: 20px;
+                width: auto;
+                padding: 10px 20px;
+                font-size: 14px;
+                border-radius: 20px;
+                min-width: auto;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             }
         }
     </style>
@@ -270,14 +305,15 @@
 
 <body>
     <!-- Header -->
-    <div class="header">
+    <header class="header" role="banner">
         <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
 
-        <div class="relative dropdown">
-            <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
-                <div class="flex flex-col items-center">
-                    <span class="text-white">Welcome, Guru</span>
-                    <span class="text-white font-semibold">{{ $user->name }}</span>
+        <div class="relative dropdown" id="userDropdown">
+            <div class="user-info flex items-center" onclick="toggleDropdown()" tabindex="0" role="button"
+                aria-haspopup="true" aria-expanded="false" aria-controls="dropdown-menu">
+                <div class="flex flex-col items-end leading-tight">
+                    <span class="text-white select-none">Welcome, Guru</span>
+                    <span class="text-white font-semibold select-text truncate max-w-[140px]">{{ $user->name }}</span>
                 </div>
                 <i
                     class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
@@ -289,10 +325,9 @@
                 </form>
             </div>
         </div>
-    </div>
+    </header>
 
-    <div class="flex flex-col md:flex-row">
-        <!-- Sidebar -->
+    <div class="flex flex-col md:flex-row min-h-screen">
         <div class="sidebar">
             <a
                 href="{{ route('Guru.Course.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">
@@ -364,66 +399,45 @@
                     </div>
                 </form>
 
-                <div id="latihanContainer"
-                    class="bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center">
-                    @foreach ($latihan as $item)
-                        <div class="mapel-item p-4 rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
-                            data-kurikulum="{{ $item->id_kurikulum }}"
-                            data-mata_pelajaran="{{ $item->id_mata_pelajaran }}" data-kelas="{{ $item->id_kelas }}">
-                            <a href="{{ route('Guru.Soal.index', ['id_latihan' => $item->id_latihan]) }}"
-                                class="text-2xl font-bold text-teal-700" text-lg hover:underline focus:outline-none
-                                focus:ring-2 focus:ring-teal-400 rounded">
-                                {{ $item->Topik }}
-                            </a>
-                        </div>
+<div id="latihanContainer" class="p-4 rounded-lg flex flex-col gap-4">
+    @foreach ($latihan as $item)
+        <div class="mapel-item p-4 rounded-lg cursor-pointer hover:shadow-lg transition-shadow mb-4 flex justify-between items-center bg-gray-200"
+            data-kurikulum="{{ $item->id_kurikulum }}"
+            data-mata_pelajaran="{{ $item->id_mata_pelajaran }}" data-kelas="{{ $item->id_kelas }}">
+            <!-- Topik Latihan -->
+            <a href="{{ route('Guru.Soal.index', ['id_latihan' => $item->id_latihan]) }}"
+                class="text-2xl font-bold text-teal-700 hover:underline focus:outline-none focus:ring-2 focus:ring-teal-400 rounded w-3/4">
+                {{ $item->Topik }}
+            </a>
 
+            <!-- Action buttons: Delete and Edit in one row -->
+            <div class="flex space-x-4 justify-end">
+                <!-- Delete Button -->
+                <form action="{{ route('Guru.Latihan.destroy', $item->id_latihan) }}" method="POST"
+                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus topik ini?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="text-red-500 flex items-center hover:text-red-700">
+                        <i class="fas fa-trash-alt mr-1"></i> Delete
+                    </button>
+                </form>
 
-                        <div class="flex space-x-5 justify-end">
-                            <form action="{{ route('Guru.Latihan.edit', $item->id_latihan) }}" method="GET">
-                                <button type="submit" class="text-blue-500 flex items-center hover:text-blue-700">
-                                    <i class="fas fa-edit mr-1"></i> Edit
-                                </button>
-                            </form>
-                        </div>
-                    @endforeach
-                </div>
+                <!-- Edit Button -->
+                <form action="{{ route('Guru.Latihan.edit', $item->id_latihan) }}" method="GET">
+                    <button type="submit" class="text-blue-500 flex items-center hover:text-blue-700">
+                        <i class="fas fa-edit mr-1"></i> Edit
+                    </button>
+                </form>
+            </div>
+        </div>
+    @endforeach
+</div>
             </section>
         </main>
 
     </div>
- <!-- Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Berhasil Menambahkan Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    @if (session('success'))
-                        {{ session('success') }}
-                    @endif
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- JavaScript to show modal if success message exists and auto-close after 3 seconds -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Menampilkan modal otomatis jika session success ada
-        @if (session('success'))
-            var myModal = new bootstrap.Modal(document.getElementById('successModal'));
-            myModal.show();
-
-            // Menutup modal setelah 3 detik
-            setTimeout(function() {
-                myModal.hide();
-            }, 3000); // 3000ms = 3 detik
-        @endif
         function toggleDropdown() {
             const menu = document.getElementById('dropdown-menu');
             const expanded = menu.classList.toggle('show');

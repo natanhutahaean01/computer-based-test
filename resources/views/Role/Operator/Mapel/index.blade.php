@@ -324,7 +324,7 @@
                     </div>
                     <div id="mapel-list">
                         @foreach ($mataPelajarans as $mapel)
-                            <div class="bg-gray-100 p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center mapel-item"
+                            <div class="bg-gray-100 p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center mapel-item mb-4"
                                 data-kurikulum="{{ $mapel->id_kurikulum }}">
                                 <h2 class="text-2xl font-bold text-teal-700">
                                     {{ $mapel->nama_mata_pelajaran }}

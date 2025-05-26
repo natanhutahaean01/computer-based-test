@@ -245,15 +245,13 @@
     <!-- Header -->
     <div class="header">
         <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
-
         <div class="relative dropdown">
             <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
                 <div class="flex flex-col items-center">
                     <span class="text-white">Welcome, Operator</span>
                     <span class="text-white font-semibold">{{ $user->name }}</span>
                 </div>
-                <i
-                    class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
+                <i class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">
@@ -311,7 +309,7 @@
             </div>
 
             <div class="bg-white p-4 md:p-6 rounded-lg shadow-md">
-                <h1 class="text-lg font-bold mb-4 text-blue-600">Informasi Siswa </h1>
+                <h1 class="text-lg font-bold mb-4 text-blue-600">Informasi Siswa</h1>
                 <div class="space-y-4">
                     <div class="mb-4">
                         <label for="kelas" class="block text-sm font-medium text-gray-700">Pilih Kelas</label>
@@ -324,35 +322,26 @@
                         </select>
                     </div>
                     @foreach ($siswa as $student)
-                        <div
-                            class="bg-gray-100 p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center
-                                    data-kelas="{{ $student->id_kelas }}">
+                        <div class="bg-gray-100 p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center student-item" data-kelas="{{ $student->id_kelas }}">
                             <div class="mb-4 md:mb-0">
-                                <h2 class="text-2xl font-bold text-teal-700">
-                                    {{ $student->nama_siswa }}
-                                </h2>
+                                <h2 class="text-2xl font-bold text-teal-700">{{ $student->nama_siswa }}</h2>
                                 <h5 class="text-gray-600">NISN: {{ $student->nis }}</h5>
                                 <h5 class="text-gray-600">Email: {{ $student->user->email }}</h5>
                                 <h5 class="text-gray-600">Status: {{ $student->status }}</h5>
-
                                 @if (session('error'))
                                     <div class="text-red-500 mb-2">
                                         {{ session('error') }}
                                     </div>
                                 @endif
                             </div>
-
                             <!-- Action Buttons: Delete & Edit -->
                             <div class="flex space-x-5">
                                 <!-- Delete Button -->
                                 <div>
-                                    <form action="{{ route('Operator.Siswa.destroy', $student->id_siswa) }}"
-                                        method="POST"
-                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun ini?');">
+                                    <form action="{{ route('Operator.Siswa.destroy', $student->id_siswa) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun ini?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
-                                            class="text-red-500 flex items-center hover:text-red-700 hover:shadow-lg transition-all duration-300">
+                                        <button type="submit" class="text-red-500 flex items-center hover:text-red-700 hover:shadow-lg transition-all duration-300">
                                             <i class="fas fa-trash-alt mr-1"></i> Delete
                                         </button>
                                     </form>
@@ -360,10 +349,8 @@
 
                                 <!-- Edit Button -->
                                 <div>
-                                    <form action="{{ route('Operator.Siswa.edit', $student->id_siswa) }}"
-                                        method="GET">
-                                        <button type="submit"
-                                            class="text-blue-500 flex items-center hover:text-blue-700 hover:shadow-lg transition-all duration-300">
+                                    <form action="{{ route('Operator.Siswa.edit', $student->id_siswa) }}" method="GET">
+                                        <button type="submit" class="text-blue-500 flex items-center hover:text-blue-700 hover:shadow-lg transition-all duration-300">
                                             <i class="fas fa-edit mr-1"></i> Edit
                                         </button>
                                     </form>
@@ -371,28 +358,6 @@
                             </div>
                         </div>
                     @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Berhasil Menambahkan Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    @if (session('success'))
-                        {{ session('success') }}
-                    @endif
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -421,7 +386,7 @@
         // Filter students based on selected class
         document.getElementById('kelas').addEventListener('change', function() {
             const selectedKelas = this.value;
-            const studentItems = document.querySelectorAll('.student-item'); // Filter class on student item
+            const studentItems = document.querySelectorAll('.student-item');
 
             studentItems.forEach(item => {
                 const itemKelas = item.getAttribute('data-kelas');

@@ -27,5 +27,5 @@ class kurikulum extends Model
 
     public function mata_pelajaran(){
         return $this->hasMany(mata_pelajaran::class);
-    }
+}
 }
