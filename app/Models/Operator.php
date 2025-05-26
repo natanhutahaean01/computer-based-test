@@ -4,44 +4,30 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Operator extends Model
+class Persentase extends Model
 {
-   
-    protected $table = 'operator'; 
-
-    protected $primaryKey = 'id_operator';
+    protected $table = 'persentase';
+    protected $primaryKey = 'id_persentase';
 
     protected $fillable = [
-        'id_operator',
-        'nama_sekolah',
-        'durasi',
-        'status',
-        'id_user',
+        'persentase',
+        'id_tipe_persentase',
+        'id_kursus',
+        'id_tipe_ujian',
     ];
 
-
-    public function user()
+    public function tipePersentase()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(tipe_persentase::class, 'id_tipe_persentase', 'id_tipe_persentase','id_tipe_persentase','id_tipe_persentase');
     }
 
-    public function kurikulum(){
-        return $this->hasMany(kurikulum::class);
+    public function kursus()
+    {
+        return $this->belongsTo(Kursus::class, 'id_kursus','id_kursus','id_kursus');
     }
 
-    public function guru(){
-        return $this->hasMany(guru::class);
-    }
-
-    public function kelas(){
-        return $this->hasMany(kelas::class);
-    }
-
-    public function mata_pelajaran(){
-        return $this->hasMany(mata_pelajaran::class);
-    }
-
-    public function siswa(){
-        return $this->hasMany(siswa::class);
+    public function tipeUjian()
+    {
+        return $this->belongsTo(tipe_ujian::class, 'id_tipe_ujian','id_tipe_ujian');
     }
 }

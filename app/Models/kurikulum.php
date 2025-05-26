@@ -18,7 +18,7 @@ class kurikulum extends Model
     ];
 
     public function operator(){
-        return $this->belongsTo(operator::class, 'id_operator');
+        return $this->belongsTo(Operator::class, 'id_operator');
     }
 
     public function kurikulum_siswa(){

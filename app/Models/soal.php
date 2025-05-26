@@ -25,7 +25,7 @@ class Soal extends Model
 
     public function latihan()
     {
-        return $this->belongsTo(Latihan::class, 'id_latihan', 'id_latihan');
+        return $this->belongsTo(latihan::class, 'id_latihan', 'id_latihan');
     }
 
     public function jawaban_soal()

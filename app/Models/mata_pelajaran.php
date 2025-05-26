@@ -19,7 +19,7 @@ class mata_pelajaran extends Model
     ];
 
     public function operator(){
-        return $this->belongsTo(operator::class);
+        return $this->belongsTo(Operator::class);
     }
 
     public function kurikulum(){
@@ -32,5 +32,5 @@ class mata_pelajaran extends Model
 
     public function guru(){
         return $this->hasOne(guru::class);
-    }
+}
 }

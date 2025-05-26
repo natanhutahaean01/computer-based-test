@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Nilai;
-use App\Models\kursus;
+use App\Models\Kursus;
 use App\Models\siswa;
 use App\Models\TipeNilai;
 use App\Models\NilaiKursus;
@@ -16,7 +16,7 @@ class NilaiController extends Controller
 {
     public function index()
     {
-        $courses = kursus::with('guru')->get();
+        $courses = Kursus::with('guru')->get();
         $user = auth()->user();
         return view('Role.Guru.Nilai.index', compact('courses', 'user'));
     }

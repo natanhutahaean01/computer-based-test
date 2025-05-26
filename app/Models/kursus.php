@@ -40,7 +40,7 @@ class Kursus extends Model
 
     public function guru()
     {
-        return $this->belongsTo(Guru::class, 'id_guru', 'id_guru');
+        return $this->belongsTo(guru::class, 'id_guru', 'id_guru');
     }
 
     public function kursusSiswa()
@@ -75,6 +75,6 @@ class Kursus extends Model
 
     public function siswa()
     {
-        return $this->belongsToMany(Siswa::class, 'kursus_siswa', 'id_kursus', 'id_siswa');
+        return $this->belongsToMany(siswa::class, 'kursus_siswa', 'id_kursus', 'id_siswa');
     }
 }

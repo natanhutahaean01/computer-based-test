@@ -10,17 +10,19 @@ use App\Imports\GuruImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class GuruController extends Controller
 {
     public function index()
     {
-        $gurus = guru::with('user')->get();
+        $gurus = Guru::with('user')->get();
         $user = auth()->user();
 
         if (!$user) {
             return redirect()->route('login');
         }
+
         return view('Role.Operator.Guru.index', compact('gurus', 'user'));
     }
 
@@ -32,10 +34,11 @@ class GuruController extends Controller
     public function import(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls',
+            'file' => 'required|mimes:xlsx,xls|max:20480',  // 20MB max
         ], [
             'file.required' => 'File harus diupload.',
             'file.mimes' => 'File harus bertipe .xlsx atau .xls.',
+            'file.max' => 'Ukuran file maksimal adalah 20MB.',
         ]);
 
         if ($request->hasFile('file') && $request->file('file')->isValid()) {
@@ -43,7 +46,7 @@ class GuruController extends Controller
                 Excel::import(new GuruImport, $request->file('file'));
                 return redirect()->route('Operator.Guru.index')->with('success', 'Data guru berhasil diupload.');
             } catch (\Exception $e) {
-                \Log::error('Error during import: ' . $e->getMessage());
+                Log::error('Error during import: ' . $e->getMessage());
                 return redirect()->back()->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
             }
         } else {
@@ -59,19 +62,18 @@ class GuruController extends Controller
         if (!$user) {
             return redirect()->route('login');
         }
+
         return view('Role.Operator.Guru.create', compact('user', 'mataPelajaran'));
     }
-
 
     public function store(Request $request)
     {
         try {
-            // Custom validation messages
             $request->validate([
                 'name' => 'required|string|max:255',
                 'nip' => 'required|numeric|digits:16|min:16|unique:guru',
                 'email' => 'required|email|unique:users,email',
-                'password' => 'required|string|min:8',
+                'password' => 'required|string|min:8|confirmed',
                 'status' => 'in:Aktif,Tidak Aktif',
                 'mata_pelajaran' => 'required|exists:mata_pelajaran,id_mata_pelajaran',
             ], [
@@ -91,7 +93,6 @@ class GuruController extends Controller
                 'mata_pelajaran.exists' => 'Mata pelajaran yang dipilih tidak valid.',
             ]);
 
-            // Create the user and associate the operator and guru data
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -100,12 +101,11 @@ class GuruController extends Controller
 
             $user->assignRole('Guru');
 
-            $idUser = auth()->user()->id;
-            $operator = Operator::where('id_user', $idUser)->first();
+            $operator = Operator::where('id_user', auth()->user()->id)->first();
 
             if (!$operator) {
-                Log::error('Operator not found for user: ' . $idUser);
-                return redirect()->back()->withErrors('ID Operator tidak ditemukan. Pastikan pengguna memiliki ID Operator yang valid.');
+                Log::error('Operator not found for user: ' . auth()->user()->id);
+                return redirect()->back()->withErrors('ID Operator tidak ditemukan.');
             }
 
             Guru::create([
@@ -119,34 +119,26 @@ class GuruController extends Controller
 
             return redirect()->route('Operator.Guru.index')->with('success', 'Guru berhasil ditambahkan.');
         } catch (\Exception $e) {
-            Log::error('Error adding guru: ' . $e->getMessage(), [
-                'request' => $request->all(),
-                'user_id' => auth()->user()->id,
-            ]);
+            Log::error('Error adding guru: ' . $e->getMessage(), ['request' => $request->all(), 'user_id' => auth()->user()->id]);
             return redirect()->back()->withErrors('Terjadi kesalahan saat menambahkan guru.');
         }
     }
 
     public function show(string $id)
     {
-        $guru = guru::with('user')->findOrFail($id);
-        return view('Role.Operator.Guru.index', compact('guru'));
+        $guru = Guru::with('user')->findOrFail($id);
+        return view('Role.Operator.Guru.show', compact('guru'));
     }
 
     public function edit(string $id)
     {
         $mataPelajaran = mata_pelajaran::all();
-        $guru = guru::with('user')->findOrFail($id);
-        $user = auth()->user();
-        return view('Role.Operator.Guru.edit', compact('guru', 'user', 'mataPelajaran'));
+        $guru = Guru::with('user')->findOrFail($id);
+        return view('Role.Operator.Guru.edit', compact('guru', 'mataPelajaran'));
     }
 
     public function update(Request $request, string $id_guru)
     {
-        // Log masuk untuk melihat data request
-        Log::debug('Update Request Data:', $request->all());
-
-        // Validasi request
         $request->validate([
             'name' => 'required|string|max:255',
             'nip' => 'required|numeric|digits:18|min:18|unique:guru,nip,' . $id_guru . ',id_guru',
@@ -165,49 +157,35 @@ class GuruController extends Controller
             'status.in' => 'Status harus bernilai "Aktif" atau "Tidak Aktif".',
         ]);
 
-        // Temukan guru berdasarkan ID
-        $guru = guru::findOrFail($id_guru);
-
-        // Update data guru
+        $guru = Guru::findOrFail($id_guru);
         $guru->nama_guru = $request->name;
         $guru->nip = $request->nip;
         $guru->status = $request->status;
 
-        // Jika user ada, update nama guru di tabel user
         if ($guru->user) {
-            Log::debug('Updating User Name:', ['old_name' => $guru->user->name, 'new_name' => $request->name]);
-            $guru->user->name = $request->name; // Update kolom 'name' di tabel 'users'
+            $guru->user->name = $request->name;
         }
 
-        // Update password jika ada perubahan
         if ($request->filled('password')) {
-            Log::debug('Password is being updated');
-            $guru->password = bcrypt($request->password); // Update password di tabel guru
-
+            $guru->password = bcrypt($request->password);
             if ($guru->user) {
-                Log::debug('Updating User Password');
-                $guru->user->password = bcrypt($request->password); // Update password di tabel users
-                $guru->user->save(); // Simpan perubahan pada user
+                $guru->user->password = bcrypt($request->password);
+                $guru->user->save();
             }
         }
 
-        // Simpan perubahan pada tabel guru
-        Log::debug('Saving Guru Data...');
         $guru->save();
 
-        // Simpan perubahan pada tabel user jika nama diupdate
         if ($guru->user) {
-            Log::debug('Saving User Data...');
-            $guru->user->save(); // Simpan perubahan nama dan password pada user
+            $guru->user->save();
         }
 
-        // Return ke halaman index dengan pesan sukses
         return redirect()->route('Operator.Guru.index')->with('success', 'Guru berhasil diperbarui.');
     }
 
     public function destroy(string $id)
     {
-        $guru = guru::findOrFail($id);
+        $guru = Guru::findOrFail($id);
 
         if ($guru->status === 'Aktif') {
             return redirect()->route('Operator.Guru.index')->with('error', 'Guru dengan status "Aktif" tidak dapat dihapus.');

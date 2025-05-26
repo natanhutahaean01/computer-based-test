@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Materi;
-use App\Models\kursus;
+use App\Models\Kursus;
 use App\Models\guru;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class MateriController extends Controller
     {
         $user = auth()->user();
 
-        $courses = kursus::with('guru')->get();
+        $courses = Kursus::with('guru')->get();
 
         $course = $courses->first();  // Ambil kursus pertama dari koleksi
 
@@ -76,25 +76,24 @@ class MateriController extends Controller
 
     public function store(Request $request)
     {
-     Log::info('Mulai validasi input.');
-
-$request->validate([
-    'judul_materi' => 'required|string|max:30',
-    'deskripsi' => 'nullable|string',
-    'file' => 'required|mimes:pdf,docx,doc,ppt,pptx|max:10240', // Validasi file
-    'id_kursus' => 'required|exists:kursus,id_kursus', // Validasi kursus
-], [
-    'judul_materi.required' => 'Judul Materi Harus diisi',
-    'file.required' => 'File Wajib diunggah'
-]);
-
+        Log::info('Mulai validasi input.');
+        $request->validate([
+            'judul_materi' => 'required|string|max:30',
+            'deskripsi' => 'nullable|string',
+            'file' => 'required|mimes:pdf,docx,doc,ppt,pptx|max:10240', // Validasi file
+            'id_kursus' => 'required|exists:kursus,id_kursus', // Validasi kursus
+        ]);
         Log::info('Validasi input berhasil.');
 
         Log::info('Mulai menyimpan file.');
-        $filePath = $request->file('file')->store('materi_files', 'public');
-        Log::info('File berhasil disimpan di: ' . $filePath);
 
-        $fileUrl = url('storage/' . $filePath); // URL yang dapat diakses untuk file
+        // Move the file directly to public/files
+        $fileName = time() . '.' . $request->file->extension();
+        $filePath = $request->file('file')->move(public_path('files'), $fileName); // Store file directly in public/files
+
+        // Generate a URL that can be accessed publicly
+        $fileUrl = url('files/' . $fileName); // URL that can be accessed for the file
+
         Log::info('File URL yang disimpan: ' . $fileUrl);
 
         try {
@@ -107,16 +106,16 @@ $request->validate([
             }
             Log::info('Guru ditemukan dengan id_guru: ' . $guru->id_guru);
 
-            // Membuat materi baru
+            // Create a new Materi record
             Log::info('Membuat materi baru dengan judul: ' . $request->judul_materi);
             Materi::create([
                 'judul_materi' => $request->judul_materi,
                 'deskripsi' => $request->deskripsi,
-                'file' => $filePath,
-                'file_url' => $fileUrl, // Menyimpan URL file
+                'file' => $fileName,
+                'file_url' => $fileUrl, // Store the file URL
                 'tanggal_materi' => now(),
                 'id_kursus' => $request->id_kursus,
-                'id_guru' => $guru->id_guru, // Mengambil id_guru dari data guru yang ditemukan
+                'id_guru' => $guru->id_guru, // Get id_guru from the found guru data
             ]);
             Log::info('Materi berhasil ditambahkan dengan judul: ' . $request->judul_materi);
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\persentase;
-use App\Models\kursus;
+use App\Models\Kursus;
 use App\Models\guru;
 use Illuminate\Support\Facades\Log;
 use App\Models\tipe_ujian;
@@ -36,7 +36,7 @@ class PersentaseController extends Controller
 
         $id_kursus = $request->query('id_kursus');
 
-        $kursus = kursus::where('id_guru', $guru->id_guru)->get();
+        $kursus = Kursus::where('id_guru', $guru->id_guru)->get();
 
         $tipeUjian = tipe_ujian::all();
         $tipePersentase = tipe_persentase::all();

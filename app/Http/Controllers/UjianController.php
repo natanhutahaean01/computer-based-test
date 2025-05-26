@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ujian;
-use App\Models\kursus;
+use App\Models\Ujian;
+use App\Models\Kursus;
 use App\Models\guru;
 use App\Models\tipe_ujian;
 use Illuminate\Support\Facades\Log;
@@ -32,7 +32,7 @@ class UjianController extends Controller
 
         $id_kursus = $request->query('id_kursus');
 
-        $courses = kursus::with('guru')->get(); // Ambil semua kursus
+        $courses = Kursus::with('guru')->get(); // Ambil semua kursus
 
         $course = $courses->where('id_kursus', $id_kursus)->first();
 
@@ -48,7 +48,7 @@ class UjianController extends Controller
             return redirect()->back()->withErrors(['error' => 'Kursus yang dipilih tidak valid.']);
         }
 
-        $ujians = ujian::where('id_kursus', $kursus->id_kursus)
+        $ujians = Ujian::where('id_kursus', $kursus->id_kursus)
             ->orderBy('tanggal_ujian', 'DESC')
             ->get();
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\soal;
 use App\Models\User;
-use App\Models\kursus;
+use App\Models\Kursus;
 use App\Models\ujian;
 use App\Models\guru;
 use App\Models\latihan;
@@ -56,7 +56,7 @@ class SoalController extends Controller
 
         $id_kursus = $request->query('id_kursus');
 
-        $courses = kursus::with('guru')->get(); // Ambil semua kursus
+        $courses = Kursus::with('guru')->get(); // Ambil semua kursus
 
         $course = $courses->where('id_kursus', $id_kursus)->first();
 
@@ -103,20 +103,20 @@ class SoalController extends Controller
         $guru = guru::where('id_user', auth()->user()->id)->first();
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            // Ensure the images folder exists
-            $imagePath = public_path('images');
-            if (!is_dir($imagePath)) {
-                mkdir($imagePath, 0755, true);
-            }
-
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move($imagePath, $imageName);
-
-            $imageUrl = url('images/' . $imageName);
-        } else {
-            $imageName = null;
-            $imageUrl = null;
+        // Pastikan folder images ada
+        $imagePath = public_path('images');
+        if (!is_dir($imagePath)) {
+            mkdir($imagePath, 0755, true);
         }
+
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move($imagePath, $imageName); // Menyimpan gambar ke folder public/images
+
+        $imageUrl = url('images/' . $imageName); // URL gambar yang dapat diakses
+    } else {
+        $imageName = null;
+        $imageUrl = null;
+    }
 
         $kursus = $guru->kursus()->first();
 
