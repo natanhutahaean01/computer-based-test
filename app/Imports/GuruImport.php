@@ -1,6 +1,4 @@
 <?php
-
-
 namespace App\Imports;
 
 use App\Models\Guru;
@@ -15,9 +13,16 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 
 class GuruImport implements ToModel, WithStartRow, WithValidation
 {
+    protected $id_operator;
+
+    public function __construct($id_operator)
+    {
+        $this->id_operator = $id_operator;
+    }
+
     public function startRow(): int
     {
-        return 2;  // Mulai dari baris kedua pada file Excel
+        return 2;
     }
 
     public function model(array $row)
@@ -40,24 +45,20 @@ class GuruImport implements ToModel, WithStartRow, WithValidation
 
         $user->assignRole('Guru');
 
-        $operator = Operator::where('id_user', auth()->user()->id)->first();
-
         $mataPelajaran = mata_pelajaran::where('nama_mata_pelajaran', $row[4])->first();
 
         if (!$mataPelajaran) {
             throw new \Exception("Mata pelajaran {$row[4]} tidak ditemukan.");
         }
 
-        Guru::create([
+        return Guru::create([
             'nama_guru' => $row[0],
             'nip' => $row[1],
             'id_user' => $user->id,
-            'id_operator' => $operator->id_operator,
+            'id_operator' => $this->id_operator,
             'status' => 'Aktif',
             'id_mata_pelajaran' => $mataPelajaran->id_mata_pelajaran,
         ]);
-
-        return null;
     }
 
     public function rules(): array
