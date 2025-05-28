@@ -166,19 +166,17 @@ class GuruController extends Controller
             $guru->user->name = $request->name;
         }
 
+        if ($guru->user) {
+        $guru->user->name = $request->name;
+
         if ($request->filled('password')) {
-            $guru->password = bcrypt($request->password);
-            if ($guru->user) {
-                $guru->user->password = bcrypt($request->password);
-                $guru->user->save();
-            }
+            $guru->user->password = bcrypt($request->password);
         }
+
+        $guru->user->save();
+    }
 
         $guru->save();
-
-        if ($guru->user) {
-            $guru->user->save();
-        }
 
         return redirect()->route('Operator.Guru.index')->with('success', 'Guru berhasil diperbarui.');
     }
