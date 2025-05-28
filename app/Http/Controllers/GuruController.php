@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class GuruController extends Controller
 {
@@ -32,27 +33,23 @@ class GuruController extends Controller
     }
 
     public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls|max:20480',  // 20MB max
-        ], [
-            'file.required' => 'File harus diupload.',
-            'file.mimes' => 'File harus bertipe .xlsx atau .xls.',
-            'file.max' => 'Ukuran file maksimal adalah 20MB.',
-        ]);
+{
+    $request->validate([
+        'file' => 'required|file|mimes:xlsx,csv,xls',
+    ]);
 
-        if ($request->hasFile('file') && $request->file('file')->isValid()) {
-            try {
-                Excel::import(new GuruImport, $request->file('file'));
-                return redirect()->route('Operator.Guru.index')->with('success', 'Data guru berhasil diupload.');
-            } catch (\Exception $e) {
-                Log::error('Error during import: ' . $e->getMessage());
-                return redirect()->back()->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
-            }
-        } else {
-            return redirect()->back()->with('error', 'File tidak valid atau gagal diupload.');
-        }
+    $operator = Operator::where('id_user', auth()->user()->id)->first();
+    if (!$operator) {
+        return back()->withErrors(['msg' => 'Operator tidak ditemukan']);
     }
+
+    try {
+        Excel::import(new GuruImport($operator->id_operator), $request->file('file'));
+        return redirect()->route('Operator.Guru.index')->with('success', 'Data guru berhasil diupload.');
+    } catch (\Throwable $e) {
+        return back()->withErrors(['msg' => 'Gagal import: ' . $e->getMessage()]);
+    }
+}
 
     public function create()
     {
@@ -134,14 +131,15 @@ class GuruController extends Controller
     {
         $mataPelajaran = mata_pelajaran::all();
         $guru = Guru::with('user')->findOrFail($id);
-        return view('Role.Operator.Guru.edit', compact('guru', 'mataPelajaran'));
+          $user = auth()->user();
+        return view('Role.Operator.Guru.edit', compact('guru', 'mataPelajaran','user'));
     }
 
     public function update(Request $request, string $id_guru)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'nip' => 'required|numeric|digits:18|min:18|unique:guru,nip,' . $id_guru . ',id_guru',
+            'nip' => 'required|numeric|digits:16|min:16|unique:guru,nip,' . $id_guru . ',id_guru',
             'password' => 'nullable|string|min:8|confirmed',
             'status' => 'required|in:Aktif,Tidak Aktif',
         ], [
@@ -149,8 +147,8 @@ class GuruController extends Controller
             'nip.required' => 'NIP harus diisi.',
             'nip.unique' => 'NIP sudah terdaftar.',
             'nip.numeric' => 'NIP harus berupa angka.',
-            'nip.digits' => 'NIP harus terdiri dari 18 digit.',
-            'nip.min' => 'NIP harus terdiri dari minimal 18 digit.',
+            'nip.digits' => 'NIP harus terdiri dari 16 digit.',
+            'nip.min' => 'NIP harus terdiri dari minimal 16 digit.',
             'password.min' => 'Password minimal terdiri dari 8 karakter.',
             'password.confirmed' => 'Password dan konfirmasi password tidak cocok.',
             'status.required' => 'Status harus diisi.',
