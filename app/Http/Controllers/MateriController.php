@@ -12,67 +12,69 @@ use Illuminate\Support\Facades\Auth;
 
 class MateriController extends Controller
 {
-    public function index(Request $request)
-    {
-        $user = auth()->user();
+public function index(Request $request)
+{
+    $user = auth()->user();
 
-        $courses = Kursus::with('guru')->get();
+    // Mendapatkan kursus berdasarkan id_kursus dari query parameter
+    $id_kursus = $request->query('id_kursus');
+    $kursus = Kursus::where('id_kursus', $id_kursus)->first();
 
-        $course = $courses->first();  // Ambil kursus pertama dari koleksi
-
-        $guru = Guru::where('id_user', $user->id)->first();
-        if (!$guru) {
-            return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
-        }
-
-        $id_kursus = $request->query('id_kursus');
-
-        $courses = kursus::with('guru')->get(); // Ambil semua kursus
-
-        $course = $courses->where('id_kursus', $id_kursus)->first();
-
-        $kursus = kursus::where('id_kursus', $id_kursus)
-            ->where('id_guru', $guru->id_guru)
-            ->first();
-
-        $materi_pertama = Materi::where('id_kursus', $kursus->id_kursus)
-            ->orderBy('tanggal_materi', 'DESC')
-            ->first(); // Mengambil satu materi pertama
-
-        $id_materi = $materi_pertama ? $materi_pertama->id_materi : null;
-
-        $materi = Materi::where('id_kursus', $kursus->id_kursus)
-            ->orderBy('tanggal_materi', 'DESC')
-            ->get(); // Mengambil semua materi yang diurutkan
-
-        return view('Role.Guru.Course.Materi.index', compact('materi', 'materi_pertama', 'user', 'course', 'kursus', 'id_kursus', 'courses', 'id_materi'));
+    // Jika kursus tidak ditemukan, kembalikan error
+    if (!$kursus) {
+        return redirect()->back()->withErrors(['error' => 'Kursus tidak ditemukan.']);
     }
 
-
-    public function create(Request $request)
-    {
-        $guru = guru::where('id_user', auth()->user()->id)->first();
-
-        if (!$guru) {
-            return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
-        }
-
-        $id_kursus = $request->query('id_kursus');
-
-        $kursus = kursus::where('id_guru', $guru->id_guru)->get();
-
-        if ($kursus->isEmpty()) {
-            return redirect()->back()->with('error', 'Kursus tidak ditemukan.');
-        }
-
-        $courses = kursus::with('guru')->get();
-
-        $course = $courses->where('id_kursus', $id_kursus)->first();
-
-        $user = auth()->user();
-
-        return view('Role.Guru.Course.Materi.create', compact('kursus','courses', 'course', 'user', 'id_kursus'));
+    // Mendapatkan data guru berdasarkan user yang login
+    $guru = Guru::where('id_user', $user->id)->first();
+    if (!$guru) {
+        return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
     }
+
+    // Mendapatkan materi pertama berdasarkan kursus yang dipilih
+    $materi_pertama = Materi::where('id_kursus', $kursus->id_kursus)
+        ->orderBy('tanggal_materi', 'DESC')
+        ->first(); // Mengambil satu materi pertama
+
+    $id_materi = $materi_pertama ? $materi_pertama->id_materi : null;
+
+    // Mengambil semua materi yang diurutkan berdasarkan tanggal materi
+    $materi = Materi::where('id_kursus', $kursus->id_kursus)
+        ->orderBy('tanggal_materi', 'DESC')
+        ->get(); // Mengambil semua materi yang diurutkan
+
+    // Memastikan $course dipassing ke view
+    $course = $kursus;
+
+    return view('Role.Guru.Course.Materi.index', compact('materi', 'materi_pertama', 'user', 'kursus', 'id_kursus', 'id_materi', 'course'));
+}
+
+public function create(Request $request)
+{
+    $guru = Guru::where('id_user', auth()->user()->id)->first();
+
+    if (!$guru) {
+        return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
+    }
+
+    $id_kursus = $request->query('id_kursus');
+
+    $kursus = Kursus::where('id_guru', $guru->id_guru)->get();
+
+    if ($kursus->isEmpty()) {
+        return redirect()->back()->with('error', 'Kursus tidak ditemukan.');
+    }
+
+    $courses = Kursus::with('guru')->get();
+
+    // Ambil kursus yang sesuai dengan id_kursus
+    $course = $courses->where('id_kursus', $id_kursus)->first();
+
+    $user = auth()->user();
+
+    return view('Role.Guru.Course.Materi.create', compact('kursus', 'courses', 'course', 'user', 'id_kursus'));
+}
+
 
     public function store(Request $request)
     {
@@ -133,7 +135,6 @@ class MateriController extends Controller
         return view('Role.Guru.Course.Materi.edit', compact('materi'));
     }
 
-
     public function edit(Request $request, $id_materi)
     {
         $materi = Materi::where('id_materi', $id_materi)->firstOrFail();
@@ -144,15 +145,15 @@ class MateriController extends Controller
 
         $id_materi = $request->query('id_materi');
 
-        $guru = guru::where('id_user', auth()->user()->id)->first();
+        $guru = Guru::where('id_user', auth()->user()->id)->first();
 
         if (!$guru) {
             return redirect()->back()->withErrors(['error' => 'Guru tidak ditemukan.']);
         }
 
-        $courses = kursus::where('id_guru', $guru->id_guru)->get();
+        $courses = Kursus::where('id_guru', $guru->id_guru)->get();
 
-        $courses = kursus::with('guru')->get();
+        $courses = Kursus::with('guru')->get();
 
         $course = $courses->where('id_kursus', $id_kursus)->first();
 

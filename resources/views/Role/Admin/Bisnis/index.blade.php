@@ -143,23 +143,40 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* Main Content */
-        .main-content {
-            margin-left: 280px;
-            padding: 100px 30px 30px;
-            flex: 1;
-            transition: all 0.3s ease-in-out;
-            overflow-y: auto;
-        }
+     
+      /* Main Content */
+.main-content {
+    margin-left: 280px;
+    padding: 100px 30px 30px;
+    flex: 1;
+    transition: all 0.3s ease-in-out;
+    overflow-y: auto;
+}
 
-        /* Main Content Box */
-        .main-content-box {
-            padding: 30px;
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
+/* Main Content Box */
+.main-content-box {
+    padding: 30px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px; /* Add margin between sections */
+}
+
+/* For each operator section */
+section {
+    margin-bottom: 20px; /* Ensure space between each operator */
+}
+
+/* For padding in user info (profile) section */
+.header .user-info {
+    padding: 0 15px;
+}
+
+/* Add spacing between the items in the sidebar */
+.sidebar a {
+    margin-bottom: 15px;
+}
+
     </style>
 </head>
 

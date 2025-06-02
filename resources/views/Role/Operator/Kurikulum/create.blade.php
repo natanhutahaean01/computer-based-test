@@ -240,6 +240,13 @@
                 padding: 15px 0;
             }
         }
+        
+        .alert-danger {
+            color: #e74c3c;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
     </style>
 </head>
 

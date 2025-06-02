@@ -31,7 +31,6 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-
         }
 
         .header .logo img {
@@ -110,7 +109,6 @@
             gap: 20px;
             transition: all 0.3s ease;
             z-index: 900;
-
         }
 
         .sidebar a {
@@ -251,11 +249,8 @@
             <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
                 <div class="flex flex-col items-center">
                     <span class="text-white">Admin</span>
-
                 </div>
-                <img alt="Profile picture" class="rounded-full ml-4" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
-                    width="50">
+                <i class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">
@@ -293,69 +288,73 @@
                     <li class="breadcrumb-item"><a href="{{ route('Admin.Akun.index') }}">Akun</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Tambah Akun</li>
                 </ol>
-                <div class="form-container">
-                    <form action="{{ route('Admin.Akun.update', $operator->id_operator) }}" method="POST">
-                        @csrf
-                        @method('PUT')
+            </nav>
 
-                        <div class="form-group">
-                            <label for="nama_sekolah">Nama Sekolah<span class="text-red-500">*</span></label>
-                            <input type="text" id="nama_sekolah" name="nama_sekolah"
-                                value="{{ old('nama_sekolah', $operator['nama_sekolah']) }}" required>
-                            @error('nama_sekolah')
-                                <span class="alert-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+            <div class="form-container">
+                <form action="{{ route('Admin.Akun.update', $operator->id_operator) }}" method="POST">
+                    @csrf
+                    @method('PUT')
 
-                        <div class="form-group">
-                            <label for="email">Email<span class="text-red-500">*</span></label>
-                            <input type="email" id="email" name="email"
-                                value="{{ old('email', $operator->user['email']) }}" required>
-                            @error('email')
-                                <span class="alert-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+                    <div class="form-group">
+                        <label for="nama_sekolah">Nama Sekolah<span class="text-red-500">*</span></label>
+                        <input type="text" id="nama_sekolah" name="nama_sekolah"
+                            value="{{ old('nama_sekolah', $operator['nama_sekolah']) }}" required>
+                        @error('nama_sekolah')
+                            <span class="alert-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                        <div class="form-group">
-                            <label for="status">Status Aktif<span class="text-red-500">*</span></label>
-                            <select id="status" name="status">
-                                <option value="Aktif"
-                                    {{ old('status', $operator->status) == 'Aktif' ? 'selected' : '' }}>Aktif</option>
-                                <option value="Tidak Aktif"
-                                    {{ old('status', $operator->status) == 'Tidak Aktif' ? 'selected' : '' }}>Tidak
-                                    Aktif</option>
-                            </select>
-                            @error('status')
-                                <span class="alert-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+                    <div class="form-group">
+                        <label for="email">Email<span class="text-red-500">*</span></label>
+                        <input type="email" id="email" name="email"
+                            value="{{ old('email', $operator->user['email']) }}" required>
+                        @error('email')
+                            <span class="alert-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                        <div class="form-group">
-                            <label for="password">Password<span class="text-red-500">*</span></label>
-                            <input type="password" id="password" name="password">
-                            @error('password')
-                                <span class="alert-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+                    <div class="form-group">
+                        <label for="status">Status Aktif<span class="text-red-500">*</span></label>
+                        <select id="status" name="status">
+                            <option value="Aktif" {{ old('status', $operator->status) == 'Aktif' ? 'selected' : '' }}>
+                                Aktif</option>
+                            <option value="Tidak Aktif"
+                                {{ old('status', $operator->status) == 'Tidak Aktif' ? 'selected' : '' }}>Tidak
+                                Aktif</option>
+                        </select>
+                        @error('status')
+                            <span class="alert-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                        <div class="form-group">
-                            <label for="password_confirmation">Konfirmasi Password<span
-                                    class="text-red-500">*</span></label>
-                            <input type="password" id="password_confirmation" name="password_confirmation">
-                            @error('password_confirmation')
-                                <span class="alert-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+                    <div class="form-group">
+                        <label for="password">Password<span class="text-red-500">*</span></label>
+                        <input type="password" id="password" name="password">
+                        @error('password')
+                            <span class="alert-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                        <div class="flex justify-end">
-                            <button type="submit"
-                                class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
-                                <span>Simpan</span>
-                                <i class="fas fa-check ml-2"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="form-group">
+                        <label for="password_confirmation">Konfirmasi Password<span
+                                class="text-red-500">*</span></label>
+                        <input type="password" id="password_confirmation" name="password_confirmation">
+                        @error('password_confirmation')
+                            <span class="alert-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+            <div class="flex justify-end mt-4">
+    <button type="submit"
+        class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
+        <span>Simpan</span>
+        <i class="fas fa-check ml-2"></i>
+    </button>
+
+
+
+                </form>
+            </div>
         </div>
     </div>
 

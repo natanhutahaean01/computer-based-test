@@ -254,9 +254,7 @@
                 <span class="text-white">Admin</span>
 
             </div>
-            <img alt="Profile picture" class="rounded-full ml-4" height="50"
-                src="https://storage.googleapis.com/a1aa/image/sG3g-w8cayIo0nXWyycQx8dmzPb0_0-Zc6iv6Fls36s.jpg"
-                width="50">
+            <i class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
         </div>
         <div id="dropdown-menu" class="dropdown-menu">
             <form action="{{ route('logout') }}" method="POST">
@@ -335,14 +333,15 @@
                         <span class="alert-danger">{{ $message }}</span>
                     @enderror
                 </div>
+<div class="flex justify-end mt-4">
+    <button type="submit"
+        class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
+        <span>Simpan</span>
+        <i class="fas fa-check ml-2"></i>
+    </button>
 
-                <div class="flex justify-end">
-                    <button type="submit"
-                        class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
-                        <span>Simpan</span>
-                        <i class="fas fa-check ml-2"></i>
-                    </button>
-                </div>
+
+
             </form>
         </div>
     </div>

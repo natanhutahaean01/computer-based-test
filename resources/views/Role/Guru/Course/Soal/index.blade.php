@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         /* General Styles */
@@ -355,6 +355,8 @@
                         <i class="fas fa-plus mr-2"></i> Tambahkan
                     </button>
                 </div>
+
+                <!-- Modal: Pilih Tipe Soal -->
                 <div id="tipeSoalModal"
                     class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
                     <div class="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -369,11 +371,6 @@
                                 class="cursor-pointer p-4 border border-gray-300 rounded-lg text-center hover:bg-gray-100 transition">
                                 <i class="fas fa-check-circle text-green-500 text-3xl"></i>
                                 <p class="mt-2 font-semibold">Benar/Salah</p>
-                            </div>
-                            <div onclick="pilihSoal('essay')"
-                                class="cursor-pointer p-4 border border-gray-300 rounded-lg text-center hover:bg-gray-100 transition">
-                                <i class="fas fa-pen text-purple-500 text-3xl"></i>
-                                <p class="mt-2 font-semibold">Essai</p>
                             </div>
                         </div>
                         <button onclick="closeTipeSoalModal()"
@@ -444,8 +441,8 @@
                                     </div>
 
                                     <div class="flex space-x-5 justify-end flex-wrap">
-                                        <form action="{{ route('Guru.Soal.preview', $soal->id_soal) }}"
-                                            method="GET" class="inline">
+                                        <form action="{{ route('Guru.Soal.preview', $soal->id_soal) }}" method="GET"
+                                            class="inline">
                                             <button type="submit"
                                                 class="text-yellow-500 flex items-center hover:text-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded">
                                                 <i class="fas fa-eye mr-1"></i> Preview
@@ -581,14 +578,6 @@
                 document.getElementById('logoutDropdown').classList.toggle('hidden');
             });
 
-            function showTipeSoalModal() {
-                document.getElementById('tipeSoalModal').classList.remove('hidden');
-            }
-
-            function closeTipeSoalModal() {
-                document.getElementById('tipeSoalModal').classList.add('hidden');
-            }
-
             function pilihSoal(tipe) {
                 Swal.fire({
                     title: 'Anda memilih ' + (tipe === 'pilgan' ? 'Pilgan' : tipe === 'truefalse' ? 'True/False' :
@@ -605,6 +594,28 @@
                         window.location.href = "{{ route('Guru.Soal.create', ['type' => 'essay']) }}";
                     }
                 });
+            }
+            // Function to toggle the modal visibility
+            function showTipeSoalModal() {
+                document.getElementById('tipeSoalModal').classList.remove('hidden');
+            }
+
+            function closeTipeSoalModal() {
+                document.getElementById('tipeSoalModal').classList.add('hidden');
+            }
+
+            // Function to redirect to the selected type of question
+            function pilihSoal(type) {
+                const idUjian = '{{ $idUjian ?? '' }}'; // Ambil id_ujian dari blade template
+                const idLatihan = '{{ $idLatihan ?? '' }}'; // Ambil id_latihan dari blade template
+                let url = `/Guru/Soal/create?type=${type}`;
+
+                // Pastikan id_ujian atau id_latihan ditambahkan pada URL jika ada
+                if (idUjian) url += `&id_ujian=${idUjian}`;
+                if (idLatihan) url += `&id_latihan=${idLatihan}`;
+
+                // Redirect ke URL yang sesuai
+                window.location.href = url;
             }
         </script>
 

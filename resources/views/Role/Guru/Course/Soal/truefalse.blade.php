@@ -331,6 +331,9 @@
                             <option value="2">True / False</option>
                         </select>
                     </div>
+
+                    <input type="hidden" name="id_ujian" value="{{ request()->query('id_ujian') }}">
+
                     <!-- Soal -->
                     <label class="block text-gray-700 text-sm font-bold mb-2">Soal</label>
                     <div class="border p-2">
@@ -349,7 +352,7 @@
                             <span class="alert-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    
+
                     <!-- Jawaban 1 (True) -->
                     <div class="border p-2 mb-4 mt-4">
                         <div class="flex space-x-2 mb-2">
@@ -456,7 +459,7 @@
             const start = textarea.selectionStart;
             const end = textarea.selectionEnd;
             const selectedText = textarea.value.substring(start, end);
-            const newText = `<strong>${selectedText}</strong>`;
+            const newText = <strong>${selectedText}</strong>;
 
             textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
             textarea.focus();
@@ -495,21 +498,21 @@
 
         answerSections.forEach(section => {
             // List button handler
-            document.getElementById(`list-button-${section}`).addEventListener('click', function(e) {
+            document.getElementById(list-button-${section}).addEventListener('click', function(e) {
                 e.preventDefault();
-                const textarea = document.getElementById(`jawaban-${section}-textarea`);
+                const textarea = document.getElementById(jawaban-${section}-textarea);
                 textarea.value += '\n- ';
                 textarea.focus();
             });
 
             // Bold button handler
-            document.getElementById(`bold-button-${section}`).addEventListener('click', function(e) {
+            document.getElementById(bold-button-${section}).addEventListener('click', function(e) {
                 e.preventDefault();
-                const textarea = document.getElementById(`jawaban-${section}-textarea`);
+                const textarea = document.getElementById(jawaban-${section}-textarea);
                 const start = textarea.selectionStart;
                 const end = textarea.selectionEnd;
                 const selectedText = textarea.value.substring(start, end);
-                const newText = `<strong>${selectedText}</strong>`;
+                const newText = <strong>${selectedText}</strong>;
 
                 textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(
                     end);
@@ -522,8 +525,8 @@
 
         // Function to remove image
         function removeImage(section) {
-            document.getElementById(`image-preview-${section}`).innerHTML = '';
-            document.getElementById(`image-input-${section}`).value = '';
+            document.getElementById(image-preview-${section}).innerHTML = '';
+            document.getElementById(image-input-${section}).value = '';
         }
     </script>
 </body>

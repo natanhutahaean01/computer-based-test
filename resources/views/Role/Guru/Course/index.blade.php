@@ -11,9 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
 
     <style>
         /* General Styles */
@@ -404,39 +401,33 @@
                 @endforeach
             </div>
         </div>
-      <!-- Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Berhasil Menambahkan Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" id="successModal"
+            tabindex="-1">
+            <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-6 mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-teal-700">
+                        Berhasil Menambahkan Data
+                    </h3>
+                    <button aria-label="Close modal" class="text-gray-600 hover:text-gray-900 text-2xl font-bold"
+                        id="closeModalBtn">
+                        ×
+                    </button>
                 </div>
-                <div class="modal-body">
+                <div class="text-gray-800 text-base">
                     @if (session('success'))
                         {{ session('success') }}
                     @endif
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <div class="mt-6 flex justify-end">
+                    <button
+                        class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-5 rounded-md transition-colors duration-300"
+                        id="closeModalBtnFooter">
+                        Tutup
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- JavaScript to show modal if success message exists and auto-close after 3 seconds -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Menampilkan modal otomatis jika session success ada
-        @if (session('success'))
-            var myModal = new bootstrap.Modal(document.getElementById('successModal'));
-            myModal.show();
-
-            // Menutup modal setelah 3 detik
-            setTimeout(function() {
-                myModal.hide();
-            }, 3000); // 3000ms = 3 detik
-        @endif
+        <script>
             // Dropdown toggle script
             const dropdownButton = document.getElementById('dropdownButton');
             const dropdownMenu = document.getElementById('dropdownMenu');

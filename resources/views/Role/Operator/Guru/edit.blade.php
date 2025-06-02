@@ -3,7 +3,7 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operator | Guru</title>
+    <title>Operator | Guru | Edit</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -99,7 +99,7 @@
 
         /* Sidebar Styles */
         .sidebar {
-            background: linear-gradient(to bottom,#00796b, #00bfae, #00796b);
+            background: linear-gradient(to bottom, #00796b, #00bfae, #00796b);
             width: 260px;
             padding: 25px 15px;
             position: fixed;
@@ -111,7 +111,7 @@
             gap: 20px;
             transition: all 0.3s ease;
             z-index: 900;
-       
+
         }
 
         .sidebar a {
@@ -145,8 +145,8 @@
 
         /* Button Styles */
         .btn-add-top-right {
-                position: absolute;
-                top: 100px;
+            position: absolute;
+            top: 100px;
             right: 30px;
             background-color: #00bfae;
             color: white;
@@ -238,28 +238,34 @@
                 padding: 15px 0;
             }
         }
+
+        .alert-danger {
+            color: #e74c3c;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
     </style>
 </head>
 
 <body>
     <!-- Header -->
     <div class="header">
-        <h1 class="text-2xl font-bold text-white">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
-        </h1>
-        
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
+
         <div class="relative dropdown">
             <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
                 <div class="flex flex-col items-center">
                     <span class="text-white">Welcome, Operator</span>
                     <span class="text-white font-semibold">{{ $user->name }}</span>
                 </div>
-                <i class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
+                <i
+                    class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
             </div>
             <div id="dropdown-menu" class="dropdown-menu">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">Logout</button>
+                    <button type="submit" class="btn btn-danger w-100">Logout</button>
                 </form>
             </div>
         </div>
@@ -270,27 +276,32 @@
         <div class="sidebar">
             <ul>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Kurikulum.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.Kurikulum.index', ['id_user' => $user->id]) }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-calendar-alt text-white mr-2"></i> Kurikulum
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.MataPelajaran.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.MataPelajaran.index', ['id_user' => $user->id]) }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-book text-white mr-2"></i> Mata Pelajaran
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Kelas.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.Kelas.index', ['id_user' => $user->id]) }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-home text-white mr-2"></i> Kelas
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Guru.index') }}" class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
+                    <a href="{{ route('Operator.Guru.index', ['id_user' => $user->id]) }}"
+                        class="flex items-center text-black p-2 rounded-lg shadow hover:bg-blue-500">
                         <i class="fas fa-chalkboard-teacher text-black mr-2"></i> Daftar Guru
                     </a>
                 </li>
                 <li class="mb-4">
-                    <a href="{{ route('Operator.Siswa.index') }}" class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
+                    <a href="{{ route('Operator.Siswa.index', ['id_user' => $user->id]) }}"
+                        class="flex items-center text-white p-2 rounded-lg hover:bg-blue-500">
                         <i class="fas fa-user-graduate text-white mr-2"></i> Daftar Siswa
                     </a>
                 </li>
@@ -300,13 +311,14 @@
         <!-- Main Content -->
         <main class="main-content" role="main">
             <div class="bg-white p-6 rounded-lg shadow-md h-full w-full">
-                <form action="{{ route('Operator.Guru.update', $guru->id_guru) }}" method="POST" class="space-y-6" novalidate>
+                <form action="{{ route('Operator.Guru.update', $guru->id_guru) }}" method="POST" class="space-y-6"
+                    novalidate>
                     @csrf
                     @method('PATCH')
                     <div class="mb-4">
                         <label class="block font-bold mb-2">NIP</label>
-                        <input type="number" value="{{ old('nip', $guru->nip) }}" maxlength="20" pattern="\d{20}" name="nip"
-                            class="block w-full p-2 border border-gray-300 rounded-md">
+                        <input type="number" value="{{ old('nip', $guru->nip) }}" maxlength="20" pattern="\d{20}"
+                            name="nip" class="block w-full p-2 border border-gray-300 rounded-md">
                         @error('nip')
                             <span class="alert-danger">
                                 {{ $message }}
@@ -336,8 +348,8 @@
                     <div class="form-group">
                         <label for="status">Status Aktif<span class="text-red-500">*</span></label>
                         <select id="status" name="status">
-                            <option value="Aktif"
-                                {{ old('status', $guru->status) == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                            <option value="Aktif" {{ old('status', $guru->status) == 'Aktif' ? 'selected' : '' }}>
+                                Aktif</option>
                             <option value="Tidak Aktif"
                                 {{ old('status', $guru->status) == 'Tidak Aktif' ? 'selected' : '' }}>Tidak
                                 Aktif</option>
@@ -347,24 +359,25 @@
                         @enderror
                     </div>
                     <!-- Password Field -->
-<div class="mb-4">
-    <label class="block font-bold mb-2">Password</label>
-    <input type="password" name="password"
-        class="block w-full p-2 border border-gray-300 rounded-md">
-    @error('password')
-        <span class="text-red-500 text-sm">{{ $message }}</span>
-    @enderror
-</div>
+                    <div class="mb-4">
+                        <label class="block font-bold mb-2">Password</label>
+                        <input type="password" name="password"
+                            class="block w-full p-2 border border-gray-300 rounded-md">
+                        @error('password')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-<!-- Confirm Password Field -->
-<div class="mb-4">
-    <label class="block text-gray-700 font-bold mb-2">Konfirmasi Password<span class="text-red-500">*</span></label>
-    <input type="password" name="password_confirmation"
-        class="w-full border border-gray-300 p-2 rounded-md">
-    @error('password_confirmation')
-        <span class="text-red-500 text-sm">{{ $message }}</span>
-    @enderror
-</div>
+                    <!-- Confirm Password Field -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2">Konfirmasi Password<span
+                                class="text-red-500">*</span></label>
+                        <input type="password" name="password_confirmation"
+                            class="w-full border border-gray-300 p-2 rounded-md">
+                        @error('password_confirmation')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                     <div class="flex justify-end mt-4">
                         <button type="submit"
@@ -373,7 +386,7 @@
                             <i class="fas fa-check ml-2"></i>
                         </button>
                     </div>
-                </form>                    
+                </form>
             </div>
         </main>
     </div>
