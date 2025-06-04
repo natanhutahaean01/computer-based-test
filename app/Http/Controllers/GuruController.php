@@ -10,6 +10,10 @@ use App\Imports\GuruImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class GuruController extends Controller
 {
@@ -211,6 +215,45 @@ public function index()
         }
 
         // Return ke halaman index dengan pesan sukses
+
+
+        if ($guru->user) {
+        $guru->user->name = $request->name;
+
+        if ($request->filled('password')) {
+            $guru->user->password = bcrypt($request->password);
+        }
+
+        $guru->user->save();
+    }
+
+        $guru->save();
+
+        // Update password jika ada perubahan
+        if ($request->filled('password')) {
+            Log::debug('Password is being updated');
+            $guru->password = bcrypt($request->password); // Update password di tabel guru
+
+            if ($guru->user) {
+                Log::debug('Updating User Password');
+                $guru->user->password = bcrypt($request->password); // Update password di tabel users
+                $guru->user->save(); // Simpan perubahan pada user
+            }
+        }
+
+        // Simpan perubahan pada tabel guru
+        Log::debug('Saving Guru Data...');
+        $guru->save();
+
+        // Simpan perubahan pada tabel user jika nama diupdate
+        if ($guru->user) {
+            Log::debug('Saving User Data...');
+            $guru->user->save(); // Simpan perubahan nama dan password pada user
+        }
+
+        // Return ke halaman index dengan pesan sukses
+
+
         return redirect()->route('Operator.Guru.index')->with('success', 'Guru berhasil diperbarui.');
     }
 
@@ -226,3 +269,4 @@ public function index()
         return redirect()->route('Operator.Guru.index')->with('success', 'Guru berhasil dihapus.');
     }
 }
+
