@@ -58,7 +58,7 @@ class User extends Authenticatable
     }
     
     public function operator(){
-        return $this->hasOne(operator::class, 'id_user');
+        return $this->hasOne(Operator::class, 'id_user');
     }
     
     public function siswa(){

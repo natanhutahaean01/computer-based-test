@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <style>
         /* General Styles */
         body {
@@ -32,74 +34,11 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-
-        }
-
-        .header .logo img {
-            max-width: 120px;
-            border-radius: 8px;
-        }
-
-        .header .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            position: relative;
-        }
-
-        .header .user-info img {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #ffffff;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .header .user-info img:hover {
-            transform: scale(1.1);
-        }
-
-        .header .user-info span {
-            font-size: 16px;
-            font-weight: 600;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 60px;
-            right: 0;
-            background-color: #ffffff;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-            padding: 10px;
-            border-radius: 8px;
-            width: 150px;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .logout-btn {
-            background-color: #ff4d4d;
-            color: white;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .logout-btn:hover {
-            background-color: #e04040;
         }
 
         /* Sidebar Styles */
         .sidebar {
-            background: linear-gradient(to bottom,#00796b, #00bfae, #00796b);
+            background: linear-gradient(to bottom, #00796b, #00bfae, #00796b);
             width: 260px;
             padding: 25px 15px;
             position: fixed;
@@ -111,7 +50,6 @@
             gap: 20px;
             transition: all 0.3s ease;
             z-index: 900;
-       
         }
 
         .sidebar a {
@@ -126,77 +64,10 @@
             transition: all 0.3s ease;
         }
 
-        .sidebar a i {
-            margin-right: 15px;
-            font-size: 22px;
-        }
-
-        .sidebar a.active {
-            background-color: #00796b;
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
         .sidebar a:hover {
             background-color: #004d40;
             color: white;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Button Styles */
-        .btn-add-top-right {
-                position: absolute;
-                top: 100px;
-            right: 30px;
-            background-color: #00bfae;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 16px;
-            border: none;
-            transition: background-color 0.3s ease;
-            min-width: 150px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-add-top-right:hover {
-            background-color: #00796b;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-            background-color: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        table th,
-        table td {
-            padding: 18px 25px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        table th {
-            background-color: #14A098;
-            color: white;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        table tr:hover {
-            background-color: #f1f1f1;
-            transform: scale(1.01);
-            transition: all 0.3s ease;
-        }
-
-        table td {
-            vertical-align: middle;
         }
 
         /* Main Content */
@@ -208,7 +79,6 @@
             overflow-y: auto;
         }
 
-        /* Main Content Box */
         .main-content-box {
             padding: 30px;
             background-color: white;
@@ -232,11 +102,6 @@
                 margin-left: 0;
                 padding: 70px 20px 20px;
             }
-
-            .btn-add-top-right {
-                width: 100%;
-                padding: 15px 0;
-            }
         }
     </style>
 </head>
@@ -247,7 +112,6 @@
         <h1 class="text-2xl font-bold text-white">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-10">
         </h1>
-        
         <div class="relative dropdown">
             <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
                 <div class="flex flex-col items-center">
@@ -303,14 +167,13 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-white p-4 rounded-lg shadow-md flex items-center gap-2 mt-8 mb-6">
                     <li class="breadcrumb-item">
-                        <a href="{{ route('Operator.Guru.store') }}"
-                            class="text-teal-500 hover:text-teal-700 font-semibold">Guru</a>
+                        <a href="{{ route('Operator.Guru.store') }}" class="text-teal-500 hover:text-teal-700 font-semibold">Guru</a>
                     </li>
                     <li class="breadcrumb-item active text-gray-600" aria-current="page">Tambah Guru</li>
                 </ol>
             </nav>
 
-            <div class="flex-1 p-4">
+                       <div class="flex-1 p-4">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-8">
                     <form id="importForm" action="{{ route('Operator.Guru.import') }}" method="POST"
                         enctype="multipart/form-data" class="flex justify-end mb-4 w-full">
@@ -325,6 +188,7 @@
                     </form>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md h-full w-full">
+                    <!-- Form Start -->
                     <form action="{{ route('Operator.Guru.store') }}" method="POST">
                         @csrf
                         <div class="mb-4">
@@ -384,8 +248,7 @@
                             @enderror
                         </div>
                         <div class="mb-4">
-                            <label class="block text-gray-700 font-bold mb-2">Konfirmasi Password<span
-                                    class="text-red-500">*</span></label>
+                            <label class="block text-gray-700 font-bold mb-2">Konfirmasi Password<span class="text-red-500">*</span></label>
                             <input type="password" name="password_confirmation"
                                 class="w-full border border-gray-300 p-2 rounded-md">
                             @error('password_confirmation')
@@ -394,6 +257,8 @@
                                 </span>
                             @enderror
                         </div>
+
+                        <!-- Tombol Simpan -->
                         <div class="flex justify-end mt-4">
                             <button type="submit"
                                 class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
@@ -401,11 +266,13 @@
                                 <i class="fas fa-check ml-2"></i>
                             </button>
                         </div>
-                    </form>                    
+                    </form>
+                    <!-- Form End -->
                 </div>
             </div>
         </div>
-        <script>
+    </div>
+     <script>
             const importButton = document.getElementById('importButton');
             const fileInput = document.getElementById('fileInput');
             const importForm = document.getElementById('importForm');

@@ -1,17 +1,17 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Guru | Latihan</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guru | Course</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-
     <style>
+        /* General Styles */
         body {
             background-color: #f4f5f7;
             font-family: 'Arial', sans-serif;
@@ -20,10 +20,11 @@
             color: #333;
         }
 
+        /* Header Styles */
         .header {
             background: linear-gradient(to right, #00bfae, #00796b);
             color: white;
-            padding: 0 1.5rem;
+            padding: 20px 30px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
@@ -31,31 +32,28 @@
             position: fixed;
             top: 0;
             width: 100%;
-            height: 64px;
             z-index: 1000;
         }
 
         .header .logo img {
             max-width: 120px;
             border-radius: 8px;
-            height: 40px;
-            object-fit: contain;
         }
 
         .header .user-info {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             position: relative;
-            cursor: pointer;
         }
 
         .header .user-info img {
-            width: 44px;
-            height: 44px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #ffffff;
+            cursor: pointer;
             transition: transform 0.3s ease;
         }
 
@@ -64,23 +62,22 @@
         }
 
         .header .user-info span {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
-            line-height: 1.2;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-            white-space: nowrap;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         }
 
+        /* Dropdown Menu Styles */
         .dropdown-menu {
             display: none;
             position: absolute;
-            top: 56px;
+            top: 60px;
             right: 0;
             background-color: #ffffff;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
             padding: 10px;
             border-radius: 8px;
-            width: 160px;
+            width: 150px;
             z-index: 1500;
         }
 
@@ -92,13 +89,10 @@
             background-color: #ff4d4d;
             color: white;
             border: none;
-            padding: 10px 0;
+            padding: 10px;
             width: 100%;
             border-radius: 6px;
-            font-weight: 600;
-            font-size: 15px;
             text-align: center;
-            transition: background-color 0.3s ease;
         }
 
         .logout-btn:hover {
@@ -107,16 +101,15 @@
 
         .sidebar {
             background: linear-gradient(to bottom, #00796b, #00bfae, #00796b);
-            width: 300px;
-            /* Lebar sidebar diperbesar */
-            padding: 2rem 1rem;
+            width: 260px;
+            padding: 25px 15px;
             position: fixed;
-            top: 64px;
+            top: 80px;
             left: 0;
             bottom: 0;
             display: flex;
             flex-direction: column;
-            gap: 1.25rem;
+            gap: 20px;
             transition: all 0.3s ease;
             z-index: 900;
         }
@@ -131,13 +124,11 @@
             font-weight: 600;
             font-size: 17px;
             transition: all 0.3s ease;
-            gap: 12px;
         }
 
         .sidebar a i {
+            margin-right: 15px;
             font-size: 22px;
-            min-width: 24px;
-            text-align: center;
         }
 
         .sidebar a.active {
@@ -152,12 +143,14 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
+        /* Adjust the "Course" button to match other sidebar items */
         #dropdownButton {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
             padding: 12px 18px;
+            /* Same as other sidebar items */
             color: white;
             text-decoration: none;
             border-radius: 12px;
@@ -168,41 +161,37 @@
 
         #dropdownButton i {
             font-size: 22px;
+            /* Same icon size as other items */
         }
 
         #dropdownButton span {
             font-size: 17px;
+            /* Same font size as other items */
         }
 
-        /* Button fixed di sebelah kanan */
+
+        /* Button Styles */
         .btn-add-top-right {
-            position: fixed;
-            top: 80px;
+            position: absolute;
+            top: 100px;
             right: 30px;
-            background-color: #28a745;
-            /* Hijau */
+            background-color: #00bfae;
             color: white;
             padding: 12px 25px;
             border-radius: 25px;
             font-size: 16px;
             border: none;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: background-color 0.3s ease;
             min-width: 150px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            z-index: 1001;
         }
 
-        /* Hover effect untuk button */
         .btn-add-top-right:hover {
-            background-color: #218838;
-            /* Hijau lebih gelap */
+            background-color: #00796b;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
 
+        /* Table Styles */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -221,7 +210,7 @@
         }
 
         table th {
-            background-color: #14a098;
+            background-color: #14A098;
             color: white;
             font-weight: 700;
             text-transform: uppercase;
@@ -237,16 +226,16 @@
             vertical-align: middle;
         }
 
+        /* Main Content */
         .main-content {
-            margin-left: 300px;
+            margin-left: 280px;
             padding: 100px 30px 30px;
             flex: 1;
             transition: all 0.3s ease-in-out;
             overflow-y: auto;
-            min-height: 100vh;
-            background-color: #e5e7eb;
         }
 
+        /* Main Content Box */
         .main-content-box {
             padding: 30px;
             background-color: white;
@@ -255,49 +244,25 @@
             margin-bottom: 30px;
         }
 
-        /* Responsive */
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .sidebar {
                 width: 100%;
-                padding: 1.25rem 1rem;
-                top: 64px;
+                padding: 20px;
+                top: 0;
                 left: 0;
                 height: auto;
                 border-radius: 0;
-                flex-direction: row;
-                justify-content: space-around;
-                gap: 0;
-                position: fixed;
-                z-index: 1000;
-            }
-
-            .sidebar a {
-                padding: 10px 12px;
-                font-size: 14px;
-                border-radius: 8px;
-                gap: 6px;
-            }
-
-            .sidebar a i {
-                font-size: 18px;
-                min-width: auto;
             }
 
             .main-content {
                 margin-left: 0;
-                padding: 130px 20px 20px;
+                padding: 70px 20px 20px;
             }
 
             .btn-add-top-right {
-                position: fixed;
-                top: 130px;
-                right: 20px;
-                width: auto;
-                padding: 10px 20px;
-                font-size: 14px;
-                border-radius: 20px;
-                min-width: auto;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                padding: 15px 0;
             }
         }
     </style>
@@ -305,15 +270,14 @@
 
 <body>
     <!-- Header -->
-    <header class="header" role="banner">
+    <div class="header">
         <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 55px;">
 
-        <div class="relative dropdown" id="userDropdown">
-            <div class="user-info flex items-center" onclick="toggleDropdown()" tabindex="0" role="button"
-                aria-haspopup="true" aria-expanded="false" aria-controls="dropdown-menu">
-                <div class="flex flex-col items-end leading-tight">
-                    <span class="text-white select-none">Welcome, Guru</span>
-                    <span class="text-white font-semibold select-text truncate max-w-[140px]">{{ $user->name }}</span>
+        <div class="relative dropdown">
+            <div class="flex items-center cursor-pointer" onclick="toggleDropdown()">
+                <div class="flex flex-col items-center">
+                    <span class="text-white">Welcome, Guru</span>
+                    <span class="text-white font-semibold">{{ $user->name }}</span>
                 </div>
                 <i
                     class="fas fa-user rounded-full ml-4 text-3xl text-gray-700 bg-white p-2 w-12 h-12 flex items-center justify-center"></i>
@@ -325,9 +289,9 @@
                 </form>
             </div>
         </div>
-    </header>
+    </div>
 
-    <div class="flex flex-col md:flex-row min-h-screen">
+    <div class="flex flex-col md:flex-row">
         <div class="sidebar">
             <a
                 href="{{ route('Guru.Course.index') }}"class="d-flex align-items-center text-gray-700 p-2 rounded-lg hover:bg-gray-300">

@@ -328,49 +328,39 @@
                                 class="text-blue-600 hover:underline">Tambah Materi</a></li>
                     </ol>
                 </nav>
-              <form action="{{ route('Guru.Materi.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+                <form action="{{ route('Guru.Materi.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-4">
+                        <label for="judul_materi" class="block font-bold mb-2">Topik Materi</label>
+                        <input type="text" name="judul_materi"
+                            class="block w-full p-2 border border-gray-300 rounded-md" required>
+                    </div>
 
-            <!-- Topik Materi -->
-            <div class="mb-4">
-                <label for="judul_materi" class="block font-bold mb-2">Topik Materi</label>
-                <input type="text" name="judul_materi" class="block w-full p-2 border border-gray-300 rounded-md @error('judul_materi') border-red-500 @enderror" value="{{ old('judul_materi') }}">
-                @error('judul_materi')
-                   <div class="alert-danger">{{ $message }}</div>
-                @enderror
+                    <div class="mb-4">
+                        <label for="deskripsi" class="block font-bold mb-2">Deskripsi</label>
+                        <textarea name="deskripsi" class="w-full border p-2" rows="5" required></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="file_upload">Upload File</label>
+                        <input type="file" id="file_upload" name="file"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            required>
+                    </div>
+
+                    <input type="hidden" name="id_kursus" value="{{ $id_kursus }}">
+
+                    <div class="flex justify-end mt-4">
+                        <button type="submit"
+                            class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
+                            <span>Simpan</span>
+                            <i class="fas fa-check ml-2"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            <!-- Deskripsi -->
-            <div class="mb-4">
-                <label for="deskripsi" class="block font-bold mb-2">Deskripsi</label>
-                <textarea name="deskripsi" class="w-full border p-2 @error('deskripsi') border-red-500 @enderror" rows="5">{{ old('deskripsi') }}</textarea>
-                @error('deskripsi')
-                    <div class="alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <!-- File Upload -->
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="file_upload">Upload File</label>
-                <input type="file" id="file_upload" name="file" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('file') border-red-500 @enderror" >
-                @error('file')
-                    <div class="alert-danger">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <input type="hidden" name="id_kursus" value="{{ $id_kursus }}">
-
-            <div class="flex justify-end mt-4">
-                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-green-400">
-                    <span>Simpan</span>
-                    <i class="fas fa-check ml-2"></i>
-                </button>
-            </div>
-        </form>
 
         </div>
-        
-    </div>
         <script>
             // Dropdown toggle script
             const dropdownButton = document.getElementById('dropdownButton');

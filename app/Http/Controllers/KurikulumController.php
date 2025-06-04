@@ -8,15 +8,20 @@ use Illuminate\Http\Request;
 
 class KurikulumController extends Controller
 {
-    public function index()
-    {
-        $kurikulums = kurikulum::with('operator')->get();
-        $user = auth()->user();
-        if (!$user) {
-            return redirect()->route('login');
-        }
-        return view('Role.Operator.Kurikulum.index', compact('kurikulums', 'user'));
+public function index()
+{
+    $user = auth()->user();
+
+    // Ensure the user is logged in
+    if (!$user) {
+        return redirect()->route('login');
     }
+
+    // Fetch all the 'kurikulums' related to the user/operator
+    $kurikulums = Kurikulum::where('id_operator', $user->operator->id_operator)->get();
+
+    return view('Role.Operator.Kurikulum.index', compact('kurikulums', 'user'));
+}
 
     public function create()
     {
@@ -31,7 +36,7 @@ class KurikulumController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_kurikulum' => 'required|string|max:20|unique:kurikulum', // Make sure the curriculum name is unique
+            'nama_kurikulum' => 'required|string|max:20|', // Make sure the curriculum name is unique
         ], [
             'nama_kurikulum.required' => 'Nama kurikulum harus diisi.', // Custom message for 'required'
             'nama_kurikulum.string' => 'Nama kurikulum harus berupa teks.', // Custom message for 'string'

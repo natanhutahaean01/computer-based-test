@@ -314,7 +314,7 @@
                         <div class="bg-white p-4 md:p-6 rounded-lg shadow-md">
             <h2 class="text-lg font-bold mb-4 text-blue-600">Informasi Kurikulum</h2>
             <div class="space-y-4">
-                @foreach ($kurikulums as $kurikulum)
+              @foreach ($kurikulums as $kurikulum)
                     <div class="bg-gray-100 p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center">
                     <h2 class="text-2xl font-bold text-teal-700">
                         {{ $kurikulum->nama_kurikulum }}

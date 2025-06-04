@@ -32,7 +32,6 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-
         }
 
         .header .logo img {
@@ -111,7 +110,6 @@
             gap: 20px;
             transition: all 0.3s ease;
             z-index: 900;
-
         }
 
         .sidebar a {
@@ -141,62 +139,6 @@
             background-color: #004d40;
             color: white;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Button Styles */
-        .btn-add-top-right {
-            position: absolute;
-            top: 100px;
-            right: 30px;
-            background-color: #00bfae;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 16px;
-            border: none;
-            transition: background-color 0.3s ease;
-            min-width: 150px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-add-top-right:hover {
-            background-color: #00796b;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-            background-color: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        table th,
-        table td {
-            padding: 18px 25px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        table th {
-            background-color: #14A098;
-            color: white;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        table tr:hover {
-            background-color: #f1f1f1;
-            transform: scale(1.01);
-            transition: all 0.3s ease;
-        }
-
-        table td {
-            vertical-align: middle;
         }
 
         /* Main Content */
@@ -362,7 +304,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     <!-- Modal -->

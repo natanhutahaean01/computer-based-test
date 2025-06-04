@@ -233,6 +233,8 @@
 
                     <input type="hidden" name="id_tipe_soal" value="{{ $soal->id_tipe_soal }}">
 
+                    <input type="hidden" name="id_ujian" value="{{ request()->query('id_ujian') }}">
+
                     <!-- Soal -->
                     <label class="block text-gray-700 text-sm font-bold mb-2">Soal</label>
                     <div class="border p-2">

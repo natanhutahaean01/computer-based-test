@@ -334,6 +334,9 @@
                             <span class="alert-danger">{{ $message }}</span>
                         @enderror
                     </div>
+
+                    <input type="hidden" name="id_ujian" value="{{ request()->query('id_ujian') }}">
+
                     <!-- Soal -->
                     <label class="block text-gray-700 text-sm font-bold mb-2">Soal</label>
                     <div class="border p-2">
@@ -379,7 +382,8 @@
 
                     <!-- Jawaban 4 -->
                     <div class="border p-2 mb-4">
-                        <textarea id="jawaban-4-textarea" name="jawaban_4" placeholder="Jawaban 4" class="w-full border p-2" rows="2"></textarea>
+                        <textarea id="jawaban-4-textarea" name="jawaban_4" placeholder="Jawaban 4" class="w-full border p-2"
+                            rows="2"></textarea>
                         @error('jawaban_4')
                             <span class="alert-danger">{{ $message }}</span>
                         @enderror

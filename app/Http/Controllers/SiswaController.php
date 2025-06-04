@@ -13,15 +13,37 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class SiswaController extends Controller
 {
-    public function index()
+  public function index(Request $request)
     {
-        $siswa = siswa::with('user')->get();
-        $kelas = kelas::all();
+        // Get the logged-in user
         $user = auth()->user();
+
+        // Ensure the user is logged in
         if (!$user) {
             return redirect()->route('login');
         }
-        return view('Role.Operator.Siswa.index', compact('siswa', 'user', 'kelas'));
+
+        $operator = Operator::where('id_user', $user->id)->first();
+
+        $kelas = kelas::where('id_operator', $operator->id_operator)->get();
+
+        if ($request->has('kelas') && $request->kelas != '') {
+            $siswa = siswa::where('id_kelas', $request->kelas)
+                ->with(['user', 'kelas'])  // Include relationships
+                ->get();
+        } else {
+            // If no class filter is applied, fetch all students
+            $siswa = siswa::with(['user', 'kelas'])->get();
+        }
+
+        $operator = Operator::where('id_user', $user->id)->first();
+
+        $siswa = siswa::where('id_operator', $operator->id_operator)
+            ->with(['operator', 'kelas']) // You can also load relationships if needed
+            ->get();
+
+
+        return view('Role.Operator.Siswa.index', compact('siswa', 'kelas', 'user'));
     }
 
     public function upload()
