@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Materi;
-use App\Models\Kursus;
+use App\Models\kursus;
 use App\Models\guru;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;

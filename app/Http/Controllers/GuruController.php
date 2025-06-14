@@ -13,25 +13,25 @@ use Illuminate\Support\Facades\Log;
 
 class GuruController extends Controller
 {
-public function index()
-{
-    // Get the logged-in user (Operator)
-    $user = auth()->user();
+    public function index()
+    {
+        // Get the logged-in user (Operator)
+        $user = auth()->user();
 
-    // Ensure the user is logged in
-    if (!$user) {
-        return redirect()->route('login');
+        // Ensure the user is logged in
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Fetch the operator related to the logged-in user
+        $operator = Operator::where('id_user', $user->id)->first(); // Use 'id_user' or correct column for your case
+
+        // Fetch the 'guru' (teachers) associated with the operator
+        $gurus = guru::where('id_operator', $operator->id_operator)->with('user')->get();
+
+        // Pass the user data to the view
+        return view('Role.Operator.Guru.index', compact('gurus', 'user'));
     }
-
-    // Fetch the operator related to the logged-in user
-    $operator = Operator::where('id_user', $user->id)->first(); // Use 'id_user' or correct column for your case
-
-    // Fetch the 'guru' (teachers) associated with the operator
-    $gurus = guru::where('id_operator', $operator->id_operator)->with('user')->get();
-
-    // Pass the user data to the view
-    return view('Role.Operator.Guru.index', compact('gurus', 'user'));
-}
 
     public function upload()
     {
@@ -75,14 +75,14 @@ public function index()
     public function store(Request $request)
     {
         try {
-            // Custom validation messages
             $request->validate([
                 'name' => 'required|string|max:255',
                 'nip' => 'required|numeric|digits:16|min:16|unique:guru',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|min:8',
                 'status' => 'in:Aktif,Tidak Aktif',
-                'mata_pelajaran' => 'required|exists:mata_pelajaran,id_mata_pelajaran',
+                'mata_pelajaran' => 'required|array|min:1',
+                'mata_pelajaran.*' => 'exists:mata_pelajaran,id_mata_pelajaran', // Validasi mata pelajaran
             ], [
                 'name.required' => 'Nama guru harus diisi.',
                 'nip.required' => 'NIP harus diisi.',
@@ -100,7 +100,7 @@ public function index()
                 'mata_pelajaran.exists' => 'Mata pelajaran yang dipilih tidak valid.',
             ]);
 
-            // Create the user and associate the operator and guru data
+            // Membuat user baru
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -109,6 +109,7 @@ public function index()
 
             $user->assignRole('Guru');
 
+            // Ambil ID Operator yang terkait dengan user
             $idUser = auth()->user()->id;
             $operator = Operator::where('id_user', $idUser)->first();
 
@@ -117,14 +118,17 @@ public function index()
                 return redirect()->back()->withErrors('ID Operator tidak ditemukan. Pastikan pengguna memiliki ID Operator yang valid.');
             }
 
-            Guru::create([
+            // Membuat data guru
+            $guru = Guru::create([
                 'nama_guru' => $request->name,
                 'nip' => $request->nip,
                 'id_user' => $user->id,
                 'id_operator' => $operator->id_operator,
                 'status' => $request->status ?? 'Aktif',
-                'id_mata_pelajaran' => $request->mata_pelajaran,
             ]);
+
+            // Menyimpan relasi many-to-many ke tabel pivot
+            $guru->mataPelajaran()->attach($request->mata_pelajaran);
 
             return redirect()->route('Operator.Guru.index')->with('success', 'Guru berhasil ditambahkan.');
         } catch (\Exception $e) {
@@ -176,6 +180,8 @@ public function index()
 
         // Temukan guru berdasarkan ID
         $guru = Guru::findOrFail($id_guru);
+
+        $guru->mataPelajaran()->sync($request->mata_pelajaran);
 
         // Update data guru
         $guru->nama_guru = $request->name;

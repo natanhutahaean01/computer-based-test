@@ -19,7 +19,7 @@ class KelasController extends Controller
         $operator = Operator::where('id_user', $user->id)->first();
 
         $kelas = Kelas::where('id_operator', $operator->id_operator)
-            ->with('operator')  // You can also load the operator relationship if necessary
+            ->with('operator')  
             ->get();
 
         return view('Role.Operator.Kelas.index', compact('kelas', 'user'));

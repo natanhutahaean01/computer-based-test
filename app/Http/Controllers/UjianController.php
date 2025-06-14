@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ujian;
-use App\Models\Kursus;
+use App\Models\ujian;
+use App\Models\kursus;
 use App\Models\guru;
 use App\Models\tipe_ujian;
 use Illuminate\Support\Facades\Log;
@@ -93,6 +93,11 @@ class UjianController extends Controller
             'waktu_mulai' => 'required|date|after:now',
             'waktu_selesai' => 'required|date|after:waktu_mulai',
         ]);
+        $request->merge([
+    'acak' => $request->input('acak', 'Aktif'), // Default 'Aktif' jika tidak diberikan
+    'grade' => $request->input('grade', 100),   // Default 100 jika tidak diberikan
+    'status_jawaban' => $request->input('status_jawaban', 'Aktif'), // Default 'Aktif' jika tidak diberikan
+]);
 
         try {
             Log::info('Validated data:', $validated);

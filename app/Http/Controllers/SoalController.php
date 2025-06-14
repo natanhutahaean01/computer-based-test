@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\soal;
 use App\Models\User;
-use App\Models\Kursus;
+use App\Models\kursus;
 use App\Models\Ujian;
 use App\Models\guru;
 use App\Models\latihan;

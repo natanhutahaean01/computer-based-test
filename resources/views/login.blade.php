@@ -50,7 +50,7 @@
         <div class="lg:w-1/2 w-full gradient-bg p-6 sm:p-8 md:p-12 flex flex-col justify-center relative overflow-hidden text-white">
             <!-- Logo -->
             <div class="text-center mb-8">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-48 md:w-64 mx-auto">
+                <img src="{{ asset('images/cbt.png') }}" alt="Logo" class="w-68 md:w-84 mx-auto">
             </div>
 
             <!-- Bottom Branding -->

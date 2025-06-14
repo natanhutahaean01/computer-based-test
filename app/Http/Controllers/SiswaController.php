@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class SiswaController extends Controller
 {
-  public function index(Request $request)
+    public function index(Request $request)
     {
         // Get the logged-in user
         $user = auth()->user();
@@ -25,24 +25,23 @@ class SiswaController extends Controller
 
         $operator = Operator::where('id_user', $user->id)->first();
 
+        // Get the available classes for the operator
         $kelas = kelas::where('id_operator', $operator->id_operator)->get();
 
+        // Fetch students based on the class filter if provided, otherwise fetch all students
         if ($request->has('kelas') && $request->kelas != '') {
             $siswa = siswa::where('id_kelas', $request->kelas)
-                ->with(['user', 'kelas'])  // Include relationships
+                ->with(['user', 'kelas']) // Include relationships (user, kelas)
+                ->orderBy('created_at', 'desc') // Ensure newest students appear first
                 ->get();
         } else {
-            // If no class filter is applied, fetch all students
-            $siswa = siswa::with(['user', 'kelas'])->get();
+            // If no class filter is applied, fetch all students and order them by created_at
+            $siswa = siswa::with(['user', 'kelas'])
+                ->orderBy('created_at', 'desc') // Ensures the newest data appears first
+                ->get();
         }
 
-        $operator = Operator::where('id_user', $user->id)->first();
-
-        $siswa = siswa::where('id_operator', $operator->id_operator)
-            ->with(['operator', 'kelas']) // You can also load relationships if needed
-            ->get();
-
-
+        // Return the view with the necessary data
         return view('Role.Operator.Siswa.index', compact('siswa', 'kelas', 'user'));
     }
 

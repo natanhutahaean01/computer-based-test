@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Nilai;
-use App\Models\Kursus;
+use App\Models\kursus;
 use App\Models\Siswa;
 use App\Models\TipeNilai;
 use App\Models\NilaiKursus;
@@ -17,8 +17,12 @@ class NilaiController extends Controller
 {
     public function index()
     {
-        $courses = Kursus::with('guru')->get();
         $user = auth()->user();
+        $guru = $user->guru; // Automatically load the guru relationship
+
+        // Filter courses by the authenticated guru's id_guru
+        $courses = Kursus::where('id_guru', $guru->id_guru)->get();
+
         return view('Role.Guru.Nilai.index', compact('courses', 'user'));
     }
 
@@ -77,7 +81,6 @@ class NilaiController extends Controller
                 'message' => 'Perhitungan nilai berhasil dilakukan untuk semua siswa',
                 'data' => $results
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
 
